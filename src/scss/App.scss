@@ -1,2 +1,27 @@
 body {
 }
+div.calendar {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  row-gap: 1rem;
+
+  & div.calendar__day {
+    border: 1px solid black;
+    padding: 1rem;
+
+    cursor: pointer;
+
+    &:nth-child(2n) {
+      border-left: 1px solid transparent;
+      margin-right: 1rem;
+    }
+    &.disabled {
+      background-color: #ccc;
+      opacity: 0.5;
+    }
+
+    &.approved {
+      background-color: lightblue;
+    }
+  }
+}
