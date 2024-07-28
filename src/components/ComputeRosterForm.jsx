@@ -1,20 +1,21 @@
 import React from "react";
-import { fetchShiftsByMonthYear } from "../actions";
+import { fetchComputedRosterByMonthYear } from "../actions";
 import { AppContext } from "../App";
 
-const RosterForm = (props) => {
+const ComputeRosterForm = (props) => {
   const { computedShifts, formData } = React.useContext(AppContext);
   const renderRosterForm = () => {
     const handleRosterFormSubmit = async (e) => {
       e.preventDefault();
       try {
-        await fetchShiftsByMonthYear(
+        await fetchComputedRosterByMonthYear(
           computedShifts.state,
           computedShifts.setData,
           {
             month: formData.state.month,
             year: formData.state.year,
           },
+          1,
         );
       } catch (error) {
         console.error(error);
@@ -29,7 +30,7 @@ const RosterForm = (props) => {
     };
     return (
       <>
-        <h2>Get Current Roster</h2>
+        <h2>Compute Roster</h2>
         <form onSubmit={handleRosterFormSubmit}>
           <label htmlFor="month">Month : </label>
           <input
@@ -53,4 +54,4 @@ const RosterForm = (props) => {
   return renderRosterForm();
 };
 
-export default RosterForm;
+export default ComputeRosterForm;

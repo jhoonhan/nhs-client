@@ -8,9 +8,9 @@ import {
 } from "react-router-dom";
 
 import Roster from "components/Roster";
-import RosterForm from "components/RosterForm";
+import ComputeRosterForm from "components/ComputeRosterForm";
 
-import { fetchAllUsers, fetchShifts, fetchShiftsByMonthYear } from "./actions";
+import { fetchAllUsers, fetchComputedRosterByMonthYear } from "./actions";
 
 import useContextValues from "./useContextValues";
 
@@ -19,7 +19,8 @@ export const AppContext = React.createContext();
 function App() {
   // const location = useLocation();
   const contextValues = useContextValues();
-  const { computedShifts, users, selectedUser, selectedShift } = contextValues;
+  const { computedShifts, form, users, formData, selectedUser, selectedShift } =
+    contextValues;
   const [formMonth, setFormMonth] = useState(8);
   const [formYear, setFormYear] = useState(2024);
   const [formUserId, setFormUserId] = useState(1);
@@ -31,7 +32,7 @@ function App() {
   const handleRequestFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      await fetchShiftsByMonthYear(
+      await fetchComputedRosterByMonthYear(
         computedShifts.state,
         computedShifts.setData,
         {
@@ -103,12 +104,9 @@ function App() {
   return (
     <AppContext.Provider value={contextValues}>
       <div className="App">
-        {/*    write me a five option dropdown */}
-
         {renderUserSelectForm()}
-
         <br />
-        <RosterForm />
+        <ComputeRosterForm />
         <Roster />
         <br />
         {renderRequestForm()}
