@@ -1,16 +1,16 @@
-import React from "react";
-import { fetchComputedRosterByMonthYear } from "../actions";
+import React, { useState } from "react";
+import { computeRoster, getComputedRoster } from "../actions";
 import { AppContext } from "../App";
 
 const ComputeRosterForm = (props) => {
-  const { computedShifts, formData } = React.useContext(AppContext);
+  const { computedRoster, formData } = React.useContext(AppContext);
+  const [computed, setComputed] = useState(false);
   const renderRosterForm = () => {
     const handleRosterFormSubmit = async (e) => {
       e.preventDefault();
       try {
-        await fetchComputedRosterByMonthYear(
-          computedShifts.state,
-          computedShifts.setData,
+        await getComputedRoster(
+          setComputed,
           {
             month: formData.state.month,
             year: formData.state.year,
@@ -48,6 +48,9 @@ const ComputeRosterForm = (props) => {
           />
           <button type="submit">Submit</button>
         </form>
+        <div>
+          <p>{`Computed: ${computed}`}</p>
+        </div>
       </>
     );
   };

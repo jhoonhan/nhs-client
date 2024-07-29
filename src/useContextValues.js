@@ -5,7 +5,8 @@ const useContextValues = () => {
   const [shifts, setShifts] = useState([]);
   const [openShifts, setOpenShifts] = useState([]);
   const [closedShifts, setClosedShifts] = useState([]);
-  const [computedShifts, setComputedShifts] = useState({
+  const [requests, setRequests] = useState([]);
+  const [computedRoster, setComputedRoster] = useState({
     allRequests: [],
     closed: [],
     conflicts: [],
@@ -20,9 +21,13 @@ const useContextValues = () => {
   });
 
   return {
-    computedShifts: {
-      state: computedShifts,
-      setData: setComputedShifts,
+    requests: {
+      state: requests,
+      setData: setRequests,
+    },
+    computedRoster: {
+      state: computedRoster,
+      setData: setComputedRoster,
     },
     users: {
       state: users,

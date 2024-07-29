@@ -10,7 +10,11 @@ import {
 import Roster from "components/Roster";
 import ComputeRosterForm from "components/ComputeRosterForm";
 
-import { fetchAllUsers, fetchComputedRosterByMonthYear } from "./actions";
+import {
+  fetchAllUsers,
+  fetchRequestsByMonthYear,
+  getComputedRoster,
+} from "./actions";
 
 import useContextValues from "./useContextValues";
 
@@ -19,30 +23,42 @@ export const AppContext = React.createContext();
 function App() {
   // const location = useLocation();
   const contextValues = useContextValues();
-  const { computedShifts, form, users, formData, selectedUser, selectedShift } =
-    contextValues;
+  const {
+    computedRoster,
+    form,
+    users,
+    formData,
+    selectedUser,
+    selectedShift,
+    requests,
+  } = contextValues;
   const [formMonth, setFormMonth] = useState(8);
   const [formYear, setFormYear] = useState(2024);
   const [formUserId, setFormUserId] = useState(1);
+  const [computed, setComputed] = useState(false);
 
   useEffect(() => {
     // fetchAllUsers(users);
+    fetchRequestsByMonthYear(requests.setData, {
+      month: formData.state.month,
+      year: formData.state.year,
+    });
   }, []);
 
   const handleRequestFormSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await fetchComputedRosterByMonthYear(
-        computedShifts.state,
-        computedShifts.setData,
-        {
-          month: formMonth,
-          year: formYear,
-        },
-      );
-    } catch (error) {
-      console.error(error);
-    }
+    // e.preventDefault();
+    // try {
+    //   await computeRoster(
+    //     setComputed,
+    //     {
+    //       month: formMonth,
+    //       year: formYear,
+    //     },
+    //     1,
+    //   );
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
   const handleRequestFormChange = (e) => {
     const { value } = e.target;

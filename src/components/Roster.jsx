@@ -1,36 +1,44 @@
 import React from "react";
 import { AppContext } from "../App";
 import groupShifts from "helpers/groupShifts";
-import { fetchRosterByMonthYear } from "../actions";
+import { fetchRosterByMonthYear, getComputedRoster } from "../actions";
 
 const Roster = () => {
-  const { computedShifts, selectedUser, selectedShift, formData } =
+  const { requests, computedRoster, selectedUser, selectedShift, formData } =
     React.useContext(AppContext);
-  const groupedByDay = groupShifts(computedShifts.state.allRequests, "day");
-  const groupedByWeek = groupShifts(computedShifts.state.allRequests, "week");
+  const groupedByDay = groupShifts(computedRoster.state.allRequests, "day");
+  const groupedByWeek = groupShifts(computedRoster.state.allRequests, "week");
 
   const validateShiftSelection = (shift, arr) => {
     shift.selectable = 1;
-    if (shift.approvedStaffs.includes(selectedUser.state)) {
+
+    if (
+      shift.shift_id in requests.state &&
+      selectedUser.state in requests.state[shift.shift_id].approved
+    ) {
       shift.selectable = 2;
       return;
     }
-    // Check if open or closed
-    if (shift.status !== "open") {
-      shift.selectable = 0;
-      return;
-    }
+
     // Check if either user has booked in day or night shift
-    arr.forEach((shiftEl) => {
-      if (shiftEl.approvedStaffs.includes(selectedUser.state)) {
+    for (let i = 0; i < arr.length; i++) {
+      let shiftEl = arr[i];
+      if (
+        shiftEl.shift_id in requests.state &&
+        selectedUser.state in requests.state[shiftEl.shift_id].approved
+      ) {
         shift.selectable = 0;
+        return;
       }
-    });
+    }
 
     // Check if previous day NIGHT when DAY selected.
     if (shift.is_day && groupedByDay[shift.day_num - 1]) {
       const prevDay = groupedByDay[shift.day_num - 1];
-      if (prevDay.night.approvedStaffs.includes(selectedUser.state)) {
+      if (
+        prevDay.night.shift_id in requests.state &&
+        selectedUser.state in requests.state[prevDay.night.shift_id].approved
+      ) {
         shift.selectable = 0;
         return;
       }
@@ -39,7 +47,10 @@ const Roster = () => {
     // Check if next day DAY when NIGHT selected.
     if (!shift.is_day && groupedByDay[shift.day_num + 1]) {
       const nextDay = groupedByDay[shift.day_num + 1];
-      if (nextDay.day.approvedStaffs.includes(selectedUser.state)) {
+      if (
+        nextDay.day.shift_id in requests.state &&
+        selectedUser.state in requests.state[nextDay.day.shift_id].approved
+      ) {
         shift.selectable = 0;
         return;
       }
@@ -49,11 +60,23 @@ const Roster = () => {
     const userShifts = groupedByWeek[shift.week_id].filter((shift) => {
       return shift.approvedStaffs.includes(selectedUser.state);
     });
+
+    // Check if open or closed
+    if (shift.status !== "open") {
+      shift.selectable = 0;
+    }
   };
 
   const handleRosterFormSubmit = async (e) => {
     e.preventDefault();
-    await fetchRosterByMonthYear();
+    await getComputedRoster(
+      computedRoster.setData,
+      {
+        month: formData.state.month,
+        year: formData.state.year,
+      },
+      0,
+    );
     try {
     } catch (error) {
       console.error(error);

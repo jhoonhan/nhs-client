@@ -1,16 +1,14 @@
 import { API_URL } from "../config";
 
-export const fetchComputedRosterByMonthYear = async (
-  state,
-  setData,
-  { month, year },
-  compute,
-) => {
+export const getComputedRoster = async (setData, { month, year }, compute) => {
   try {
     const res = await (
       await fetch(`${API_URL}/roster/${month}/${year}/${compute}`)
     ).json();
-    setData(res.data);
+
+    if (res.status === "success" && res.data) {
+      compute ? setData(true) : setData(res.data);
+    }
     return res;
   } catch (error) {
     console.error(error);
@@ -44,6 +42,33 @@ export const updateShift = async (shift_id, data) => {
         body: JSON.stringify({ shift_id, data }),
       })
     ).json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const fetchRequestsByMonthYear = async (setData, { month, year }) => {
+  try {
+    const res = await (
+      await fetch(`${API_URL}/request-date/${month}/${year}`)
+    ).json();
+    const resObj = {};
+    if (res.status === "success" && res.data) {
+      res.data[0].forEach((request) => {
+        if (!resObj[request.shift_id]) {
+          resObj[request.shift_id] = { approved: {}, pending: {} };
+        }
+
+        if (request.status === "approved") {
+          resObj[request.shift_id].approved[request.user_id] = request;
+        } else {
+          resObj[request.shift_id].pending[request.user_id] = request;
+        }
+      });
+      setData(resObj);
+    }
+    return resObj;
   } catch (error) {
     console.error(error);
     throw error;
