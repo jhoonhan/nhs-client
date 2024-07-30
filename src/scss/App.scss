@@ -18,10 +18,20 @@ div.calendar {
     &.disabled {
       background-color: #ccc;
       opacity: 0.5;
+      cursor: not-allowed;
     }
 
     &.approved {
       background-color: lightblue;
+      cursor: not-allowed;
+    }
+
+    &.selected {
+      background-color: lightgreen;
+    }
+
+    &.pending {
+      background-color: lightcoral;
     }
   }
 }

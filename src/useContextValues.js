@@ -7,24 +7,27 @@ const useContextValues = () => {
   const [closedShifts, setClosedShifts] = useState([]);
   const [requests, setRequests] = useState([]);
   const [computedRoster, setComputedRoster] = useState({
-    allRequests: [],
+    allShifts: [],
     closed: [],
     conflicts: [],
     open: [],
+    requests: [],
   });
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(1);
-  const [selectedShift, setSelectedShift] = useState(1);
+  const [selectedShifts, setSelectedShifts] = useState({});
   const [formData, setFormData] = useState({
     month: 8,
     year: 2024,
   });
+  const [currentUserData, setCurrentUserData] = useState({
+    id: 0,
+    name: "",
+    email: "",
+  });
+  const [unusedPriorities, setUnusedPriorities] = useState([]);
 
   return {
-    requests: {
-      state: requests,
-      setData: setRequests,
-    },
     computedRoster: {
       state: computedRoster,
       setData: setComputedRoster,
@@ -37,13 +40,17 @@ const useContextValues = () => {
       state: selectedUser,
       setData: setSelectedUser,
     },
-    selectedShift: {
-      state: selectedShift,
-      setData: setSelectedShift,
+    selectedShifts: {
+      state: selectedShifts,
+      setData: setSelectedShifts,
     },
     formData: {
       state: formData,
       setData: setFormData,
+    },
+    unusedPriorities: {
+      state: unusedPriorities,
+      setData: setUnusedPriorities,
     },
   };
 };

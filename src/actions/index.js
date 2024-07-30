@@ -1,4 +1,43 @@
 import { API_URL } from "../config";
+import server from "../server";
+
+const formatRequests = ({ allShifts, requests }) => {
+  // 7/30 Fix
+  const groupedByShift = {};
+  const groupedByUser = {};
+
+  // First create empty object with all shift_id
+  allShifts.forEach((shift) => {
+    if (!groupedByShift[shift.shift_id]) {
+      groupedByShift[shift.shift_id] = {
+        approved: {},
+        pending: {},
+        rejected: {},
+      };
+    }
+  });
+
+  requests.forEach((request) => {
+    if (!groupedByUser[request.user_id]) {
+      groupedByUser[request.user_id] = {
+        approved: [],
+        pending: [],
+        rejected: [],
+      };
+    }
+    if (request.status === "approved") {
+      groupedByShift[request.shift_id].approved[request.user_id] = request;
+      groupedByUser[request.user_id].approved.push(request);
+    } else if (request.status === "pending") {
+      groupedByShift[request.shift_id].pending[request.user_id] = request;
+      groupedByUser[request.user_id].pending.push(request);
+    } else {
+      groupedByShift[request.shift_id].rejected[request.user_id] = request;
+      groupedByUser[request.user_id].rejected.push(request);
+    }
+  });
+  return { all: requests, groupedByShift, groupedByUser };
+};
 
 export const getComputedRoster = async (setData, { month, year }, compute) => {
   try {
@@ -6,19 +45,34 @@ export const getComputedRoster = async (setData, { month, year }, compute) => {
       await fetch(`${API_URL}/roster/${month}/${year}/${compute}`)
     ).json();
 
+    console.log(res.data);
+
+    let requests = {};
     if (res.status === "success" && res.data) {
-      compute ? setData(true) : setData(res.data);
+      requests = formatRequests(res.data);
+      compute ? setData(true) : setData({ ...res.data, requests });
     }
-    return res;
+    return { ...res.data, requests };
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
-export const fetchRosterByMonthYear = (month, year) => {};
-
-export const createRequest = async (shift_id, user_id, priority_user) => {};
+/** 7/30 Feature
+ * Create requests in batch by list
+ * @param requestList array
+ * @returns {Promise<void>}
+ */
+export const createRequestByList = async (requestList) => {
+  try {
+    const res = await server.post("/request/create-by-list", requestList);
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 export const fetchAllUsers = async ({ state, setData }) => {
   try {
@@ -42,33 +96,6 @@ export const updateShift = async (shift_id, data) => {
         body: JSON.stringify({ shift_id, data }),
       })
     ).json();
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-export const fetchRequestsByMonthYear = async (setData, { month, year }) => {
-  try {
-    const res = await (
-      await fetch(`${API_URL}/request-date/${month}/${year}`)
-    ).json();
-    const resObj = {};
-    if (res.status === "success" && res.data) {
-      res.data[0].forEach((request) => {
-        if (!resObj[request.shift_id]) {
-          resObj[request.shift_id] = { approved: {}, pending: {} };
-        }
-
-        if (request.status === "approved") {
-          resObj[request.shift_id].approved[request.user_id] = request;
-        } else {
-          resObj[request.shift_id].pending[request.user_id] = request;
-        }
-      });
-      setData(resObj);
-    }
-    return resObj;
   } catch (error) {
     console.error(error);
     throw error;

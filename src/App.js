@@ -17,6 +17,7 @@ import {
 } from "./actions";
 
 import useContextValues from "./useContextValues";
+import RequestForm from "./components/RequestForm";
 
 export const AppContext = React.createContext();
 
@@ -32,57 +33,12 @@ function App() {
     selectedShift,
     requests,
   } = contextValues;
-  const [formMonth, setFormMonth] = useState(8);
-  const [formYear, setFormYear] = useState(2024);
-  const [formUserId, setFormUserId] = useState(1);
-  const [computed, setComputed] = useState(false);
 
-  useEffect(() => {
-    // fetchAllUsers(users);
-    fetchRequestsByMonthYear(requests.setData, {
-      month: formData.state.month,
-      year: formData.state.year,
-    });
-  }, []);
-
-  const handleRequestFormSubmit = async (e) => {
-    // e.preventDefault();
-    // try {
-    //   await computeRoster(
-    //     setComputed,
-    //     {
-    //       month: formMonth,
-    //       year: formYear,
-    //     },
-    //     1,
-    //   );
-    // } catch (error) {
-    //   console.error(error);
-    // }
-  };
-  const handleRequestFormChange = (e) => {
-    const { value } = e.target;
-    e.target.id === "userId" && setFormUserId(value);
-  };
+  useEffect(() => {}, []);
 
   const handleUserSelect = async (e) => {
     e.preventDefault();
     selectedUser.setData(+e.target.value);
-  };
-
-  const renderRequestForm = () => {
-    return (
-      <>
-        <h2>Make a Request</h2>
-        <form onSubmit={handleRequestFormSubmit}>
-          <label htmlFor="userId">User Id : {selectedUser.state}</label>
-          <br />
-          <label htmlFor="shiftId">Shift Id : {selectedShift.state}</label>
-          <br />
-          <button type="submit">Submit</button>
-        </form>
-      </>
-    );
   };
 
   const renderUserSelectForm = () => {
@@ -125,7 +81,7 @@ function App() {
         <ComputeRosterForm />
         <Roster />
         <br />
-        {renderRequestForm()}
+        <RequestForm />
       </div>
     </AppContext.Provider>
   );
