@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import { AppContext } from "../App";
-import { createRequestByList } from "../actions";
+import { createRequestByList, getComputedRoster } from "../actions";
 import { formatRequestObj } from "../helpers/formatters";
 
 const RequestForm = () => {
-  const { selectedUser, selectedShifts } = React.useContext(AppContext);
+  const { computedRoster, formData, selectedUser, selectedShifts } =
+    React.useContext(AppContext);
 
   const handleRequestFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await createRequestByList(
-        formatRequestObj(selectedShifts.state),
+      await createRequestByList(formatRequestObj(selectedShifts.state));
+      await getComputedRoster(
+        computedRoster.setData,
+        {
+          month: formData.state.month,
+          year: formData.state.year,
+        },
+        0,
       );
+      selectedShifts.setData([]);
     } catch (error) {
       console.error(error);
     }

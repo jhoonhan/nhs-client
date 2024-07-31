@@ -45,8 +45,6 @@ export const getComputedRoster = async (setData, { month, year }, compute) => {
       await fetch(`${API_URL}/roster/${month}/${year}/${compute}`)
     ).json();
 
-    console.log(res.data);
-
     let requests = {};
     if (res.status === "success" && res.data) {
       requests = formatRequests(res.data);

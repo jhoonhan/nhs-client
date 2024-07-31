@@ -91,24 +91,13 @@ const Roster = () => {
     // Check if request pending
   };
 
-  const handleRosterFormSubmit = async (e) => {
-    e.preventDefault();
-    const res = await getComputedRoster(
-      computedRoster.setData,
-      {
-        month: formData.state.month,
-        year: formData.state.year,
-      },
-      0,
+  const getUnusedPriorities = (userRequest) => {
+    let approvedAndPendingRequests = userRequest?.approved.concat(
+      userRequest?.pending,
     );
-    const rejectedRequests =
-      res.requests.groupedByUser[selectedUser.state].rejected;
-
-    const userRequest = res.requests.groupedByUser[selectedUser.state];
-
-    const approvedAndPendingRequests = userRequest.approved.concat(
-      userRequest.pending,
-    );
+    if (!approvedAndPendingRequests) {
+      approvedAndPendingRequests = [];
+    }
 
     const range = Array.from({ length: PRIORITY_RANGE }, (_, i) => i + 1);
     //
@@ -118,11 +107,24 @@ const Roster = () => {
     );
 
     // Filter out those that exist in the priorities array
-    const unusedPriorityList = range.filter((num) => !priorities.includes(num));
+    return range.filter((num) => !priorities.includes(num));
+  };
 
-    unusedPriorities.setData(unusedPriorityList);
-
+  const handleRosterFormSubmit = async (e) => {
+    e.preventDefault();
     try {
+      const res = await getComputedRoster(
+        computedRoster.setData,
+        {
+          month: formData.state.month,
+          year: formData.state.year,
+        },
+        0,
+      );
+
+      unusedPriorities.setData(
+        getUnusedPriorities(res.requests.groupedByUser[selectedUser.state]),
+      );
     } catch (error) {
       console.error(error);
       throw error;
@@ -173,10 +175,13 @@ const Roster = () => {
         });
         const temp = [...unusedPriorities.state];
         temp.pop();
+        temp.sort((a, b) => a - b);
         unusedPriorities.setData(temp);
       } else {
         const priority = selectedShifts.state[shift_id].priority;
-        unusedPriorities.setData([...unusedPriorities.state, priority]);
+        const tempPriorities = [...unusedPriorities.state, priority];
+        tempPriorities.sort((a, b) => a - b);
+        unusedPriorities.setData(tempPriorities);
 
         const temp = { ...selectedShifts.state };
         delete temp[shift_id];
