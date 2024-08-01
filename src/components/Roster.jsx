@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { AppContext } from "../App";
 import groupShifts from "helpers/groupShifts";
 import { getComputedRoster } from "../actions";
-import { PRIORITY_RANGE } from "../config";
+import { PRIORITY_RANGE, MAX_REQUEST_PER_WEEK } from "../config";
+import { validateShiftSelection } from "./rosterValidation";
 
 const Roster = () => {
   const {
@@ -16,99 +17,11 @@ const Roster = () => {
   const [groupedByWeek, setGroupedByWeek] = useState({});
 
   useEffect(() => {
-    setGroupedByDay(groupShifts(computedRoster.state.allShifts, "day"));
-    setGroupedByWeek(groupShifts(computedRoster.state.allShifts, "week"));
-  }, [computedRoster.state.allShifts]);
+    setGroupedByDay(groupShifts(computedRoster.state.shifts.shifts, "day"));
+    setGroupedByWeek(groupShifts(computedRoster.state.shifts.shifts, "week"));
+  }, [computedRoster.state.shifts.shifts]);
 
-  const validateShiftSelection = (shift, arr) => {
-    // 0 = GREY | DISABLED
-    // 1 = WHITE | AVAILABLE
-    // 2 = BLUE | APPROVED
-    // 3 = RED | REQUESTED
-    shift.selectable = 1;
-    const groupedShifts = computedRoster.state.requests.groupedByShift;
-
-    if (selectedUser.state in groupedShifts[shift.shift_id].approved) {
-      shift.selectable = 2;
-      return;
-    } else if (selectedUser.state in groupedShifts[shift.shift_id].pending) {
-      shift.selectable = 3;
-      return;
-    }
-
-    // Check if either user has booked in day or night shift
-    for (let i = 0; i < arr.length; i++) {
-      let shiftEl = arr[i];
-      if (
-        shiftEl.shift_id in groupedShifts &&
-        (selectedUser.state in groupedShifts[shiftEl.shift_id].approved ||
-          selectedUser.state in groupedShifts[shiftEl.shift_id].pending ||
-          shiftEl.shift_id in selectedShifts.state)
-      ) {
-        if (!(shift.shift_id in selectedShifts.state)) shift.selectable = 0;
-        return;
-      }
-    }
-
-    // Check if previous day NIGHT when DAY selected.
-    if (shift.is_day && groupedByDay[shift.day_num - 1]) {
-      const prevDay = groupedByDay[shift.day_num - 1];
-      if (
-        prevDay.night.shift_id in groupedShifts &&
-        (selectedUser.state in groupedShifts[prevDay.night.shift_id].approved ||
-          selectedUser.state in groupedShifts[prevDay.night.shift_id].pending ||
-          prevDay.night.shift_id in selectedShifts.state)
-      ) {
-        shift.selectable = 0;
-        return;
-      }
-    }
-
-    // Check if next day DAY when NIGHT selected.
-    if (!shift.is_day && groupedByDay[shift.day_num + 1]) {
-      const nextDay = groupedByDay[shift.day_num + 1];
-      if (
-        nextDay.day.shift_id in computedRoster.state.requests.groupedByShift &&
-        (selectedUser.state in groupedShifts[nextDay.day.shift_id].approved ||
-          selectedUser.state in groupedShifts[nextDay.day.shift_id].pending ||
-          nextDay.day.shift_id in selectedShifts.state)
-      ) {
-        shift.selectable = 0;
-        return;
-      }
-    }
-
-    // TODO: Check if user has more than 3 shifts in a week
-    const userShifts = groupedByWeek[shift.week_id].filter((shift) => {
-      return shift.approvedStaffs.includes(selectedUser.state);
-    });
-
-    // Check if open or closed
-    if (shift.status !== "open") {
-      shift.selectable = 0;
-    }
-
-    // Check if request pending
-  };
-
-  const getUnusedPriorities = (userRequest) => {
-    let approvedAndPendingRequests = userRequest?.approved.concat(
-      userRequest?.pending,
-    );
-    if (!approvedAndPendingRequests) {
-      approvedAndPendingRequests = [];
-    }
-
-    const range = Array.from({ length: PRIORITY_RANGE }, (_, i) => i + 1);
-    //
-    // // Map requests to an array of priority_user values
-    const priorities = approvedAndPendingRequests.map(
-      (request) => request.priority_user,
-    );
-
-    // Filter out those that exist in the priorities array
-    return range.filter((num) => !priorities.includes(num));
-  };
+  useEffect(() => {}, [computedRoster.state]);
 
   const handleRosterFormSubmit = async (e) => {
     e.preventDefault();
@@ -121,10 +34,6 @@ const Roster = () => {
         },
         0,
       );
-
-      unusedPriorities.setData(
-        getUnusedPriorities(res.requests.groupedByUser[selectedUser.state]),
-      );
     } catch (error) {
       console.error(error);
       throw error;
@@ -135,6 +44,55 @@ const Roster = () => {
     e.target.id === "month"
       ? formData.setData({ ...formData.state, month: value })
       : formData.setData({ ...formData.state, year: value });
+  };
+
+  const shiftBoxClass = ({ shift_id, selectable }) => {
+    if (selectable === 0) {
+      return "disabled";
+    } else if (selectable === 2) {
+      return "approved";
+    } else if (shift_id in selectedShifts.state) {
+      return "selected";
+    } else if (selectable === 3) {
+      return "pending";
+    }
+  };
+
+  const handleDayClick = ({ shift_id, selectable }) => {
+    if (!(shift_id in selectedShifts.state)) {
+      if (selectable !== 1 || unusedPriorities.state.length === 0) {
+        return;
+      }
+      selectedShifts.setData({
+        ...selectedShifts.state,
+        [shift_id]: {
+          user_id: selectedUser.state,
+          week_id:
+            computedRoster.state.requests.groupedByShift[shift_id].week_id,
+          priority: unusedPriorities.state[unusedPriorities.state.length - 1],
+        },
+      });
+      const temp = [...unusedPriorities.state];
+      temp.pop();
+      temp.sort((a, b) => a - b);
+      unusedPriorities.setData(temp);
+    } else {
+      const priority = selectedShifts.state[shift_id].priority;
+      const tempPriorities = [...unusedPriorities.state, priority];
+      tempPriorities.sort((a, b) => a - b);
+      unusedPriorities.setData(tempPriorities);
+
+      const temp = { ...selectedShifts.state };
+      delete temp[shift_id];
+      selectedShifts.setData(temp);
+    }
+  };
+
+  const getSelectedPriority = (shift_id) => {
+    if (shift_id in selectedShifts.state) {
+      return selectedShifts.state[shift_id].priority;
+    }
+    return "";
   };
 
   const renderCalendar = () => {
@@ -149,53 +107,6 @@ const Roster = () => {
       return names.join(", ");
     };
 
-    const shiftBoxClass = ({ shift_id, selectable }) => {
-      if (selectable === 0) {
-        return "disabled";
-      } else if (selectable === 2) {
-        return "approved";
-      } else if (shift_id in selectedShifts.state) {
-        return "selected";
-      } else if (selectable === 3) {
-        return "pending";
-      }
-    };
-
-    const handleDayClick = ({ shift_id, selectable }) => {
-      if (!(shift_id in selectedShifts.state)) {
-        if (selectable !== 1 || unusedPriorities.state.length === 0) {
-          return;
-        }
-        selectedShifts.setData({
-          ...selectedShifts.state,
-          [shift_id]: {
-            user_id: selectedUser.state,
-            priority: unusedPriorities.state[unusedPriorities.state.length - 1],
-          },
-        });
-        const temp = [...unusedPriorities.state];
-        temp.pop();
-        temp.sort((a, b) => a - b);
-        unusedPriorities.setData(temp);
-      } else {
-        const priority = selectedShifts.state[shift_id].priority;
-        const tempPriorities = [...unusedPriorities.state, priority];
-        tempPriorities.sort((a, b) => a - b);
-        unusedPriorities.setData(tempPriorities);
-
-        const temp = { ...selectedShifts.state };
-        delete temp[shift_id];
-        selectedShifts.setData(temp);
-      }
-    };
-
-    const getSelectedPriority = (shift_id) => {
-      if (shift_id in selectedShifts.state) {
-        return selectedShifts.state[shift_id].priority;
-      }
-      return "";
-    };
-
     return (
       <div className="calendar">
         {Object.keys(groupedByDay).map((day_num) => {
@@ -204,7 +115,12 @@ const Roster = () => {
             groupedByDay[day_num].night,
           ];
           return shifts.map((shift, i, arr) => {
-            validateShiftSelection(shift, arr);
+            validateShiftSelection(
+              shift,
+              arr,
+              { computedRoster, selectedUser, selectedShifts },
+              { groupedByDay },
+            );
             return (
               <div
                 key={shift.shift_id}

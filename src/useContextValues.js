@@ -1,17 +1,19 @@
 import { useState } from "react";
+import useUnusedPriorities from "./hooks/useUnusedPriorities";
 
 const useContextValues = () => {
-  const [shiftStatus, setShiftStatus] = useState("open");
-  const [shifts, setShifts] = useState([]);
-  const [openShifts, setOpenShifts] = useState([]);
-  const [closedShifts, setClosedShifts] = useState([]);
-  const [requests, setRequests] = useState([]);
   const [computedRoster, setComputedRoster] = useState({
-    allShifts: [],
     closed: [],
     conflicts: [],
+    monthData: {},
     open: [],
-    requests: [],
+    requests: { all: [], groupedByShift: {}, groupedByUser: {} },
+    shifts: {
+      shifts: {},
+      id_range: { start: 0, end: 0 },
+      week_range: { start: 0, end: 0 },
+    },
+    userData: {},
   });
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(1);
@@ -20,12 +22,11 @@ const useContextValues = () => {
     month: 8,
     year: 2024,
   });
-  const [currentUserData, setCurrentUserData] = useState({
-    id: 0,
-    name: "",
-    email: "",
-  });
-  const [unusedPriorities, setUnusedPriorities] = useState([]);
+
+  const [unusedPriorities, setUnusedPriorities] = useUnusedPriorities(
+    computedRoster.requests.groupedByUser,
+    selectedUser,
+  );
 
   return {
     computedRoster: {

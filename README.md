@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+# Developer Notes
+### 7/29
+Implementing allowing user to make request.
+To do this, the scheduling algorithm needs to know which `user_priority` is left to use.
+- Make a scheduling algorithm to return unused `user_priority` for a given `user_id`.
+    - To achieve this, we should update `priorirty_computed` in `request` table when approving requests.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### 7/30
+- Right now the algorithm does not return all shifts but shifts with at least one request. I need to fix this so that the frontend day selection UI works properly.
+  - Need to fix how the algorithm creates `monthdata` so that it creates for all days in the month not just days with requests.
+  - Day selection UI works properly now.
 
-## Available Scripts
+- Add sending request to the backend function.
+  - Send by list so that only one connection is established.
+  - Once request is submitted, it is in `pending` status until computation is run.
 
-In the project directory, you can run:
 
-### `npm start`
+### 7/31
+- Upon submitting request, refresh the calendar.
+- Subimtting request works. Should return users with requests left.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 8/1
+- Validation for 3 shifts per week in both FE and BE.
+  - Grouping data by week and checking if there are more than 3 shifts in a week.
+  - Checking for three request status, `approved`, `pending`, and `selected` was challenging.
+- It is implemented in FE only as request only comes from FE. But if we were to allow more than 12 selections, BE should also have the validation.
+- Convert getUnusedPriorities to a custom hook.
+  - Each time selected user was changed, it had to manually get unused priorities. By converting this into a custom hook with other states as parameters, it can be automatically updated when the user is changed via useEffect hook inside the custom hook.
 
-### `npm test`
+  
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### TODO
+- User API
+- Frontend
+  - Cancel pending request
+- Documentation on scheduling algorithm
 
-### `npm run build`
+### Backlog
+- Scheduling algorithm records its computation result data each time it is run to `compute_record` table.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Schedule Algorithm

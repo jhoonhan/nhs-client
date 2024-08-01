@@ -30,11 +30,16 @@ function App() {
     users,
     formData,
     selectedUser,
-    selectedShift,
+    selectedShifts,
+    unusedPriorities,
     requests,
   } = contextValues;
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    selectedShifts.setData([]);
+  }, [selectedUser.state]);
+
+  useEffect(() => {}, [unusedPriorities.state]);
 
   const handleUserSelect = async (e) => {
     e.preventDefault();

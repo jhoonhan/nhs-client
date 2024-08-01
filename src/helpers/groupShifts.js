@@ -1,19 +1,19 @@
 const groupShifts = (shifts, by) => {
   const data = {};
   if (by === "day") {
-    shifts.forEach((shift) => {
-      const isDay = shift.is_day ? "day" : "night";
-      if (!data[shift.day_num]) {
-        data[shift.day_num] = {};
+    Object.keys(shifts).forEach((shift_id) => {
+      const isDay = shifts[shift_id].is_day ? "day" : "night";
+      if (!data[shifts[shift_id].day_num]) {
+        data[shifts[shift_id].day_num] = {};
       }
-      data[shift.day_num][isDay] = shift;
+      data[shifts[shift_id].day_num][isDay] = shifts[shift_id];
     });
   } else if (by === "week") {
-    shifts.forEach((shift) => {
-      if (!data[shift.week_id]) {
-        data[shift.week_id] = [];
+    Object.keys(shifts).forEach((shift_id) => {
+      if (!data[shifts[shift_id].week_id]) {
+        data[shifts[shift_id].week_id] = [];
       }
-      data[shift.week_id].push(shift);
+      data[shifts[shift_id].week_id].push(shifts[shift_id]);
     });
   }
   return data;

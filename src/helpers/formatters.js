@@ -7,3 +7,9 @@ export const formatRequestObj = (requestObj) => {
     };
   });
 };
+
+export const formatObjectToArray = (obj) => {
+  return Object.keys(obj).map((key) => {
+    return obj[key];
+  });
+};

@@ -1,15 +1,15 @@
 import { API_URL } from "../config";
 import server from "../server";
 
-const formatRequests = ({ allShifts, requests }) => {
+const formatRequests = ({ requests, shifts }) => {
   // 7/30 Fix
   const groupedByShift = {};
   const groupedByUser = {};
 
   // First create empty object with all shift_id
-  allShifts.forEach((shift) => {
-    if (!groupedByShift[shift.shift_id]) {
-      groupedByShift[shift.shift_id] = {
+  Object.keys(shifts.shifts).forEach((shift_id) => {
+    if (!groupedByShift[shift_id]) {
+      groupedByShift[shift_id] = {
         approved: {},
         pending: {},
         rejected: {},
