@@ -1,37 +1,53 @@
-body {
+.flex--v {
+  display: flex;
+  flex-direction: column;
 }
-div.calendar {
-  display: grid;
-  grid-template-columns: repeat(14, 1fr);
-  row-gap: 1rem;
 
-  & div.calendar__day {
-    border: 1px solid black;
-    padding: 1rem;
+.flex--h {
+  display: flex;
+  flex-direction: row;
+}
 
-    cursor: pointer;
+.flex-gap--d {
+  gap: 1rem;
+}
 
-    &:nth-child(2n) {
-      border-left: 1px solid transparent;
-      margin-right: 1rem;
-    }
-    &.disabled {
-      background-color: #ccc;
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+@import "layout";
+@import "roster/calendar";
+@import "roster/detail";
 
-    &.approved {
-      background-color: lightblue;
-      cursor: not-allowed;
-    }
+.btn--primary {
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  padding: 1rem 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
 
-    &.selected {
-      background-color: lightgreen;
-    }
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
-    &.pending {
-      background-color: lightcoral;
-    }
+  padding: 1.5rem;
+  border: 1px solid black;
+  border-radius: 2rem;
+
+ &.card--user {
+   display: grid;
+   grid-template-columns: auto 1fr;
+   align-items: center;
+   gap: 1rem;
+
+   & .card--user__profile-picture {
+     width: 5rem;
+     aspect-ratio: 1;
+     background-color: red;
+     border-radius: 1000px;
+   }
   }
 }
+

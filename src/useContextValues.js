@@ -17,6 +17,7 @@ const useContextValues = () => {
   });
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(1);
+  const [selectedShift, setSelectedShift] = useState(0);
   const [selectedShifts, setSelectedShifts] = useState({});
   const [formData, setFormData] = useState({
     month: 8,
@@ -40,6 +41,10 @@ const useContextValues = () => {
     selectedUser: {
       state: selectedUser,
       setData: setSelectedUser,
+    },
+    selectedShift: {
+      state: selectedShift,
+      setData: setSelectedShift,
     },
     selectedShifts: {
       state: selectedShifts,

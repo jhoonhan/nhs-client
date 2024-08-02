@@ -1,0 +1,11 @@
+.layout--two-column-detail {
+  .body {
+    position: relative;
+
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 3.5fr 1fr;
+    column-gap: 2rem;
+  }
+}

@@ -1,28 +1,17 @@
 import "./scss/App.scss";
 import React, { useEffect, useContext, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useLocation,
-} from "react-router-dom";
 
-import Roster from "components/Roster";
+import Roster from "components/Roster/Roster";
 import ComputeRosterForm from "components/ComputeRosterForm";
-
-import {
-  fetchAllUsers,
-  fetchRequestsByMonthYear,
-  getComputedRoster,
-} from "./actions";
 
 import useContextValues from "./useContextValues";
 import RequestForm from "./components/RequestForm";
+import { Route, Switch, useLocation } from "react-router-dom";
 
 export const AppContext = React.createContext();
 
 function App() {
-  // const location = useLocation();
+  const location = useLocation();
   const contextValues = useContextValues();
   const {
     computedRoster,
@@ -39,7 +28,9 @@ function App() {
     selectedShifts.setData([]);
   }, [selectedUser.state]);
 
-  useEffect(() => {}, [unusedPriorities.state]);
+  useEffect(() => {
+    console.log(computedRoster.state);
+  }, [computedRoster.state]);
 
   const handleUserSelect = async (e) => {
     e.preventDefault();
@@ -80,13 +71,13 @@ function App() {
 
   return (
     <AppContext.Provider value={contextValues}>
+      {renderUserSelectForm()}
       <div className="App">
-        {renderUserSelectForm()}
-        <br />
-        <ComputeRosterForm />
-        <Roster />
-        <br />
-        <RequestForm />
+        <Switch location={location}>
+          <Route path="/" exact render={() => renderUserSelectForm()} />
+          <Route path="/manager" render={() => <ComputeRosterForm />} />
+          <Route path="/roster" render={() => <Roster />} />
+        </Switch>
       </div>
     </AppContext.Provider>
   );

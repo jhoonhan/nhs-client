@@ -1,5 +1,5 @@
-import groupShifts from "../helpers/groupShifts";
-import { MAX_REQUEST_PER_WEEK } from "../config";
+import groupShifts from "helpers/groupShifts";
+import { MAX_REQUEST_PER_WEEK } from "config";
 
 const getCurrentWeekSelectedCount = (
   { selectedShifts, computedRoster },
@@ -86,23 +86,28 @@ export const validateShiftSelection = (
   }
 
   // Check if user has more than 3 shifts in a week
-  const userRequests = groupShifts(
-    groupedRequestByUser[selectedUser.state].approved.concat(
-      groupedRequestByUser[selectedUser.state].pending,
-    ),
-    "week",
-  );
-  let userRequestForTheWeek =
-    week_id in userRequests
-      ? userRequests[week_id].length +
-        getCurrentWeekSelectedCount({ selectedShifts, computedRoster }, week_id)
-      : getCurrentWeekSelectedCount(
-          { selectedShifts, computedRoster },
-          week_id,
-        );
-  if (userRequestForTheWeek >= MAX_REQUEST_PER_WEEK) {
-    shift.selectable = 0;
-    return;
+  if (selectedUser.state in groupedRequestByUser) {
+    const userRequests = groupShifts(
+      groupedRequestByUser[selectedUser.state].approved.concat(
+        groupedRequestByUser[selectedUser.state].pending,
+      ),
+      "week",
+    );
+    let userRequestForTheWeek =
+      week_id in userRequests
+        ? userRequests[week_id].length +
+          getCurrentWeekSelectedCount(
+            { selectedShifts, computedRoster },
+            week_id,
+          )
+        : getCurrentWeekSelectedCount(
+            { selectedShifts, computedRoster },
+            week_id,
+          );
+    if (userRequestForTheWeek >= MAX_REQUEST_PER_WEEK) {
+      shift.selectable = 0;
+      return;
+    }
   }
 
   // Check if open or closed

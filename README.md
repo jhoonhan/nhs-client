@@ -28,13 +28,23 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
 - Convert getUnusedPriorities to a custom hook.
   - Each time selected user was changed, it had to manually get unused priorities. By converting this into a custom hook with other states as parameters, it can be automatically updated when the user is changed via useEffect hook inside the custom hook.
 
-  
+### 8/2
+- Frontend
+  - Design basic UI for nurses.
+  - Shift detail panel is added.
+  - Selection UI slightly changed.
+
+### 8/3
+- Frontend
+  - Continue to work on the UI.
 
 ### TODO
 - User API
 - Frontend
   - Cancel pending request
 - Documentation on scheduling algorithm
+- Bug fix when other month is selected.
+  - Default values probably not set correctly.
 
 ### Backlog
 - Scheduling algorithm records its computation result data each time it is run to `compute_record` table.
