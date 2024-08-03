@@ -3,7 +3,7 @@ import { validateShiftSelection } from "./rosterValidation";
 import { AppContext } from "App";
 import groupShifts from "helpers/groupShifts";
 import { capitalizeString, formatObjectToArray } from "helpers/formatters";
-import getApprovedStaffNumber from "helpers/getApprovedStaffnumber";
+import getStaffRequestNumber from "helpers/getStaffRequestNumber";
 
 const Calendar = () => {
   const {
@@ -91,7 +91,11 @@ const Calendar = () => {
     }
 
     if (shift.selectable !== 1) {
-      return "";
+      return (
+        <span className={`radio-selector disabled`}>
+          {getSelectedPriority(shift.shift_id)}
+        </span>
+      );
     }
 
     return (
@@ -101,7 +105,9 @@ const Calendar = () => {
           e.stopPropagation();
           handleDaySelectClick(e, shift);
         }}
-      />
+      >
+        {getSelectedPriority(shift.shift_id)}
+      </span>
     );
   };
 
@@ -128,21 +134,22 @@ const Calendar = () => {
           >
             <div className={"calendar__day__boxes__header"}>
               <span className={"calendar__day__boxes__header__title"}>
-                {shift.is_day ? "Day" : "Night"}
+                {shift.is_day ? "D" : "N"}
               </span>
               {renderSelectRadio(shift)}
             </div>
             <div className={"calendar__day__boxes__box__info"}>
               <p>
                 Staffs:{" "}
-                {getApprovedStaffNumber(
+                {getStaffRequestNumber(
                   shift.shift_id,
                   computedRoster.state.requests.groupedByShift,
+                  "approved",
                 )}
                 /{shift.min_staff}
               </p>
               <p>{capitalizeString(shift.status)}</p>
-              <p>{getSelectedPriority(shift.shift_id)}</p>
+              {/*<p>{getSelectedPriority(shift.shift_id)}</p>*/}
             </div>
           </div>
         );

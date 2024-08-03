@@ -36,7 +36,8 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
 
 ### 8/3
 - Frontend
-  - Continue to work on the UI.
+  - Submit form is added.
+- User API
 
 ### TODO
 - User API

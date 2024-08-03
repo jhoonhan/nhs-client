@@ -2,10 +2,16 @@ import React, { useState } from "react";
 import { AppContext } from "../App";
 import { createRequestByList, getComputedRoster } from "../actions";
 import { formatRequestObj } from "../helpers/formatters";
+import getShiftdate from "../helpers/getShiftDate";
 
 const RequestForm = () => {
-  const { computedRoster, formData, selectedUser, selectedShifts } =
-    React.useContext(AppContext);
+  const {
+    computedRoster,
+    formData,
+    selectedUser,
+    selectedShifts,
+    unusedPriorities,
+  } = React.useContext(AppContext);
 
   const handleRequestFormSubmit = async (e) => {
     e.preventDefault();
@@ -24,28 +30,71 @@ const RequestForm = () => {
       console.error(error);
     }
   };
+  const renderUnusedPriorities = () => {
+    if (unusedPriorities.state.length === 0) {
+      return;
+    }
+    return (
+      <div>
+        <p>Available Requests: {unusedPriorities.state.length}</p>
+        <p>Available Priorities : {unusedPriorities.state.join(", ")}</p>
+        <p>
+          Next Priority:{" "}
+          {unusedPriorities.state[unusedPriorities.state.length - 1]}
+        </p>
+      </div>
+    );
+  };
 
   const renderSelectedShifts = () => {
-    return Object.keys(selectedShifts.state).map((shift_id) => {
+    const rows = Object.keys(selectedShifts.state).map((shift_id) => {
       return (
-        <ul key={shift_id}>
-          <li>Shift Id :{shift_id}</li>
-          <li>Priority : {selectedShifts.state[shift_id].priority}</li>
-        </ul>
+        <tr key={shift_id}>
+          <td>
+            {getShiftdate(computedRoster.state, shift_id, selectedUser.state)}
+          </td>
+          <td>
+            <p>
+              {computedRoster.state.shifts.shifts[shift_id].is_day
+                ? "Day"
+                : "Night"}
+            </p>
+          </td>
+          <td>
+            <p>Priority : {selectedShifts.state[shift_id].priority}</p>
+          </td>
+        </tr>
       );
     });
+    if (rows.length === 0) {
+      return <span>Select the shift by clicking the circular button.</span>;
+    }
+
+    return (
+      <table className={"reqeust-form__selected-shifts__table"}>
+        <thead>
+          <tr className={"thead-row"}>
+            <td>Date</td>
+            <td>Shift Type</td>
+            <td>Priority</td>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
   };
   return (
-    <>
+    <div className={"component__request-form"}>
       <h2>Make a Request</h2>
+
+      {renderUnusedPriorities()}
       <form onSubmit={handleRequestFormSubmit}>
-        <label htmlFor="userId">User Id : {selectedUser.state}</label>
-        <br />
-        <br />
-        <div>{renderSelectedShifts()}</div>
+        <div className={"reqeust-form__selected-shifts"}>
+          {renderSelectedShifts()}
+        </div>
         <button type="submit">Submit</button>
       </form>
-    </>
+    </div>
   );
 };
 

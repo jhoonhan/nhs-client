@@ -4,8 +4,8 @@ import {
   capitalizeString,
   formatName,
   formatObjectToArray,
-} from "../../helpers/formatters";
-import getApprovedStaffNumber from "../../helpers/getApprovedStaffnumber";
+} from "helpers/formatters";
+import getStaffRequestNumber from "helpers/getStaffRequestNumber";
 
 const RosterDetail = () => {
   const {
@@ -49,6 +49,17 @@ const RosterDetail = () => {
     });
   };
 
+  const approvedRequestNumber = getStaffRequestNumber(
+    shift_id,
+    computedRoster.state.requests.groupedByShift,
+    "approved",
+  );
+  const pendingRequestNumber = getStaffRequestNumber(
+    shift_id,
+    computedRoster.state.requests.groupedByShift,
+    "pending",
+  );
+
   const renderDetailInfo = () => {
     if (!shift) return "";
 
@@ -64,25 +75,22 @@ const RosterDetail = () => {
 
             <div className={"flex--v"}>
               <span>Status: {capitalizeString(shift.status)}</span>
-              <span>
-                Approved Staff:{" "}
-                {getApprovedStaffNumber(
-                  shift_id,
-                  computedRoster.state.requests.groupedByShift,
-                )}
-                /{shift.min_staff}
-              </span>
             </div>
           </div>
         </div>
         <div className={"roster-detail__content__info"}>
-          <h4>Approved Requests:</h4>
+          <h4>
+            Approved Staffs: {approvedRequestNumber}/{shift.min_staff}
+          </h4>
           <div className={"flex--v flex-gap--d"}>
             {renderRequestStaff(selectedShift.state, "approved")}
           </div>
         </div>
         <div className={"roster-detail__content__info"}>
-          <h4>Pending Requests:</h4>
+          <h4>
+            Pending Requests: {pendingRequestNumber}/
+            {shift.min_staff - approvedRequestNumber}
+          </h4>
           <div className={"flex--v flex-gap--d"}>
             {renderRequestStaff(selectedShift.state, "pending")}
           </div>

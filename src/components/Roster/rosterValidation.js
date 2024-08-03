@@ -29,14 +29,16 @@ export const validateShiftSelection = (
   const groupedRequestByShift = computedRoster.state.requests.groupedByShift;
   const groupedRequestByUser = computedRoster.state.requests.groupedByUser;
 
-  if (selectedUser.state in groupedRequestByShift[shift.shift_id].approved) {
-    shift.selectable = 2;
-    return;
-  } else if (
-    selectedUser.state in groupedRequestByShift[shift.shift_id].pending
-  ) {
-    shift.selectable = 3;
-    return;
+  if (shift.shift_id in groupedRequestByShift) {
+    if (selectedUser.state in groupedRequestByShift[shift.shift_id].approved) {
+      shift.selectable = 2;
+      return;
+    } else if (
+      selectedUser.state in groupedRequestByShift[shift.shift_id].pending
+    ) {
+      shift.selectable = 3;
+      return;
+    }
   }
 
   // Check if either user has booked in day or night shift

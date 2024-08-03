@@ -56,13 +56,6 @@ const Roster = () => {
       : formData.setData({ ...formData.state, year: value });
   };
 
-  const renderPriorities = () => {
-    return (
-      <div>
-        <p>Unused Priorities : {unusedPriorities.state.join(", ")}</p>
-      </div>
-    );
-  };
   const renderCalendarSelectForm = () => {
     return (
       <form onSubmit={handleRosterFormSubmit}>
@@ -96,7 +89,6 @@ const Roster = () => {
           <div className={"body"}>
             <div className={"layout__main-content"}>
               <Calendar />
-              {renderPriorities()}
               <RequestForm />
             </div>
             <div className={"layout__detail-content"}>
