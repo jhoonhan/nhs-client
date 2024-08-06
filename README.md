@@ -57,7 +57,9 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
 
 ### 8/6
 - Change selected user to contain all user data. This requires major refactoring.
-  - `selectedUser` is now an object containing all user data.
+  - Instead of changing `selectedUser`,`currentdUser` is added and it now contains all user data.
+  - When `currentdUser` is first set by `useLogin()`, `selectedUser` is set to `currentdUser.user_id`.
+  - `selectedUser` is only used by Manager view
 - Manager view
 
 ### TODO

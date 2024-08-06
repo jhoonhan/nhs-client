@@ -126,7 +126,7 @@ export const fetchUserById = async (accessToken, id, id_type, { setData }) => {
       )
     ).json();
     if (!res.data) throw new Error("No user found");
-    setData(res.data.user_id);
+    setData(res.data);
     return res;
   } catch (error) {
     console.error(error);

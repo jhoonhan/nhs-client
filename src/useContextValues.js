@@ -17,6 +17,13 @@ const useContextValues = () => {
     userData: {},
   });
   const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState({
+    user_id: 0,
+    ms_id: 0,
+    email: "",
+    first_name: "",
+    last_name: "",
+  });
   const [selectedUser, setSelectedUser] = useState(0);
   const [selectedShift, setSelectedShift] = useState(0);
   const [selectedShifts, setSelectedShifts] = useState({});
@@ -30,8 +37,8 @@ const useContextValues = () => {
     selectedUser,
   );
   const isLoggedIn = useSignIn({
-    state: selectedUser,
-    setData: setSelectedUser,
+    state: currentUser,
+    setData: setCurrentUser,
   });
 
   return {
@@ -45,6 +52,10 @@ const useContextValues = () => {
     users: {
       state: users,
       setData: setUsers,
+    },
+    currentUser: {
+      state: currentUser,
+      setData: setCurrentUser,
     },
     selectedUser: {
       state: selectedUser,

@@ -57,6 +57,7 @@ const App = () => {
     form,
     users,
     formData,
+    currentUser,
     selectedUser,
     selectedShifts,
     unusedPriorities,
@@ -67,10 +68,14 @@ const App = () => {
     selectedShifts.setData([]);
   }, [selectedUser.state]);
 
-  useEffect(() => {
-    // console.log(computedRoster.state);
-  }, [computedRoster.state]);
+  useEffect(() => {}, [contextValues]);
 
+  // 8/6 - When logged in, it first sets the selected user to the current user.
+  useEffect(() => {
+    selectedUser.setData(currentUser.state.user_id);
+  }, [currentUser.state]);
+
+  // Manager View
   const handleUserSelect = async (e) => {
     e.preventDefault();
     selectedUser.setData(+e.target.value);

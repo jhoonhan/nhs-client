@@ -10,6 +10,7 @@ const Roster = () => {
   const {
     computedRoster,
     isLoggedIn,
+    currentUser,
     selectedUser,
     selectedShifts,
     formData,
@@ -17,7 +18,7 @@ const Roster = () => {
   } = React.useContext(AppContext);
 
   useEffect(() => {
-    if (!isLoggedIn.state.accessToken || !selectedUser.state) return;
+    if (!isLoggedIn.state.accessToken || !currentUser.state) return;
     const fetchComputedRoster = async () => {
       try {
         await getComputedRoster(

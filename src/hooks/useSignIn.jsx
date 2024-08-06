@@ -7,7 +7,7 @@ const accessTokenRequest = {
   scopes: [API_GENERAL_ACCESS], // replace with your API's scope
 };
 
-const useSignIn = (selectedUser) => {
+const useSignIn = (currentUser) => {
   const { instance, accounts } = useMsal();
   const isAuthenticated = useIsAuthenticated();
   const [accessToken, setAccessToken] = useState(null);
@@ -24,15 +24,15 @@ const useSignIn = (selectedUser) => {
         setAccessToken(accessToken);
         setIsLoggedIn(true);
         // Get user_id from the db using ms_id
-        // 8/6 update. Set selectedUser to have all information.
+        // 8/6 update. Set currentUser to have all information.
         const userData = await fetchUserById(
           response.accessToken,
           ms_id,
           1,
-          selectedUser,
+          currentUser,
         );
-        console.log(account);
-        console.log("userData", userData);
+        // 8/6 - Sets currentUser to have all information
+        currentUser.setData({ ...account, ...userData.data });
       })
       .catch((error) => {
         console.error(error);
