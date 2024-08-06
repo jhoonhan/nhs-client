@@ -61,6 +61,7 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
   - When `currentdUser` is first set by `useLogin()`, `selectedUser` is set to `currentdUser.user_id`.
   - `selectedUser` is only used by Manager view
 - Manager view
+  - Create view conditional rendering.
 
 ### TODO
 - User API
