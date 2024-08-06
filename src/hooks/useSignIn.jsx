@@ -24,7 +24,15 @@ const useSignIn = (selectedUser) => {
         setAccessToken(accessToken);
         setIsLoggedIn(true);
         // Get user_id from the db using ms_id
-        await fetchUserById(response.accessToken, ms_id, 1, selectedUser);
+        // 8/6 update. Set selectedUser to have all information.
+        const userData = await fetchUserById(
+          response.accessToken,
+          ms_id,
+          1,
+          selectedUser,
+        );
+        console.log(account);
+        console.log("userData", userData);
       })
       .catch((error) => {
         console.error(error);

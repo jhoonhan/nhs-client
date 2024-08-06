@@ -56,6 +56,8 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
   - Changed default `user_id` to 0. When its falsy, change it to do nothing.
 
 ### 8/6
+- Change selected user to contain all user data. This requires major refactoring.
+  - `selectedUser` is now an object containing all user data.
 - Manager view
 
 ### TODO

@@ -68,7 +68,7 @@ const App = () => {
   }, [selectedUser.state]);
 
   useEffect(() => {
-    console.log(computedRoster.state);
+    // console.log(computedRoster.state);
   }, [computedRoster.state]);
 
   const handleUserSelect = async (e) => {
