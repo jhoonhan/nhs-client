@@ -9,6 +9,7 @@ import RosterDetail from "./RosterDetail";
 const Roster = () => {
   const {
     computedRoster,
+    isLoggedIn,
     selectedUser,
     selectedShifts,
     formData,
@@ -16,9 +17,11 @@ const Roster = () => {
   } = React.useContext(AppContext);
 
   useEffect(() => {
+    if (!isLoggedIn.state.accessToken || !selectedUser.state) return;
     const fetchComputedRoster = async () => {
       try {
         await getComputedRoster(
+          isLoggedIn.state.accessToken,
           computedRoster.setData,
           {
             month: formData.state.month,
@@ -31,12 +34,13 @@ const Roster = () => {
       }
     };
     fetchComputedRoster();
-  }, []);
+  }, [isLoggedIn.state.accessToken]);
 
   const handleRosterFormSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await getComputedRoster(
+        isLoggedIn.state.accessToken,
         computedRoster.setData,
         {
           month: formData.state.month,

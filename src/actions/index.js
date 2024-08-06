@@ -1,6 +1,16 @@
 import { API_URL } from "../config";
 import server from "../server";
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 
+const generateHeader = (method, accessToken) => {
+  return {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+};
 const formatRequests = ({ requests, shifts }) => {
   // 7/30 Fix
   const groupedByShift = {};
@@ -39,10 +49,18 @@ const formatRequests = ({ requests, shifts }) => {
   return { all: requests, groupedByShift, groupedByUser };
 };
 
-export const getComputedRoster = async (setData, { month, year }, compute) => {
+export const getComputedRoster = async (
+  accessToken,
+  setData,
+  { month, year },
+  compute,
+) => {
   try {
     const res = await (
-      await fetch(`${API_URL}/roster/${month}/${year}/${compute}`)
+      await fetch(
+        `${API_URL}/roster/${month}/${year}/${compute}`,
+        generateHeader("GET", accessToken),
+      )
     ).json();
 
     let requests = {};
@@ -59,12 +77,17 @@ export const getComputedRoster = async (setData, { month, year }, compute) => {
 
 /** 7/30 Feature
  * Create requests in batch by list
+ * @param accessToken string
  * @param requestList array
  * @returns {Promise<void>}
  */
-export const createRequestByList = async (requestList) => {
+export const createRequestByList = async (accessToken, requestList) => {
   try {
-    const res = await server.post("/request/create-by-list", requestList);
+    const res = await server.post(
+      "/request/create-by-list",
+      requestList,
+      generateHeader("POST", accessToken),
+    );
     return res.data;
   } catch (error) {
     console.error(error);
@@ -72,9 +95,11 @@ export const createRequestByList = async (requestList) => {
   }
 };
 
-export const fetchAllUsers = async ({ state, setData }) => {
+export const fetchAllUsers = async (accessToken, { state, setData }) => {
   try {
-    const res = await (await fetch(`${API_URL}/get-all-user`)).json();
+    const res = await (
+      await fetch(`${API_URL}/get-all-user`, generateHeader("GET", accessToken))
+    ).json();
     setData(res.data);
     return res;
   } catch (error) {
@@ -83,16 +108,50 @@ export const fetchAllUsers = async ({ state, setData }) => {
   }
 };
 
-export const updateShift = async (shift_id, data) => {
+/** 8/5 Update
+ * Fetch user by id and id_type
+ * @param accessToken string
+ * @param id
+ * @param id_type int
+ * @param state
+ * @param setData
+ * @returns {Promise<any>}
+ */
+export const fetchUserById = async (accessToken, id, id_type, { setData }) => {
+  try {
+    const res = await (
+      await fetch(
+        `${API_URL}/user/${id_type}/${id}`,
+        generateHeader("GET", accessToken),
+      )
+    ).json();
+    if (!res.data) throw new Error("No user found");
+    setData(res.data.user_id);
+    return res;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const updateShift = async (accessToken, shift_id, data) => {
   try {
     return await (
-      await fetch(`${API_URL}/approve-shift`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ shift_id, data }),
-      })
+      await fetch(
+        `${API_URL}/approve-shift`,
+        generateHeader("PUT", accessToken),
+      )
+    ).json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const loginUser = async (accessToken, data) => {
+  try {
+    return await (
+      await fetch(`${API_URL}/login`, generateHeader("POST", accessToken))
     ).json();
   } catch (error) {
     console.error(error);

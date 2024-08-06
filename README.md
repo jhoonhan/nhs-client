@@ -38,6 +38,25 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
 - Frontend
   - Submit form is added.
 - User API
+  - Azure AD authentication is enabled.
+  - Add user.
+    - User must be added with required data with `ms_id` of `"0"`.
+    - Managers must send invitation on Azure Entra ID.
+    - When user accepts the invitation and logs in for the first time, the user is added to the database with the `ms_id` from the token.
+  - Server token authentication.
+  - Frontend UI
+
+### 8/5
+- Server token authentication.
+  - Save `accessToken` to `sessionData` in `localStorage`.
+  - Create a custom hook to get `accessToken` from `localStorage` and if not, request one.
+    - This is a bad practice. Instead, create `useSignIn` custom hook to handle refresh.
+  - `computeRoster` is fired when `isAuthenticated` is changed via `useEffect` hook.
+- Get registered `user_id` upon login.
+  - Changed default `user_id` to 0. When its falsy, change it to do nothing.
+
+### 8/6
+- Manager view
 
 ### TODO
 - User API
@@ -46,6 +65,8 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
 - Documentation on scheduling algorithm
 - Bug fix when other month is selected.
   - Default values probably not set correctly.
+- Manager view
+- Fix JWT authorization in the backend.
 
 ### Backlog
 - Scheduling algorithm records its computation result data each time it is run to `compute_record` table.

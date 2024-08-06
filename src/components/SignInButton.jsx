@@ -1,39 +1,46 @@
 import React from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "authConfig";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Dropdown from "react-bootstrap/Dropdown";
+import { loginUser } from "actions";
+import { AppContext } from "App";
 
 /**
  * Renders a drop down button with child buttons for logging in with a popup or redirect
  */
 export const SignInButton = () => {
+  const { isLoggedIn } = React.useContext(AppContext);
   const { instance } = useMsal();
 
-  const handleLogin = (loginType) => {
-    if (loginType === "popup") {
-      instance.loginPopup(loginRequest).catch((e) => {
-        console.log(e);
-      });
-    } else if (loginType === "redirect") {
-      instance.loginRedirect(loginRequest).catch((e) => {
-        console.log(e);
-      });
+  const handleLogin = async () => {
+    try {
+      const res = await instance.loginPopup(loginRequest);
+      const fullnameArr = res.account.name.split(" ");
+      const data = {
+        ms_id: res.uniqueId,
+        first_name: fullnameArr[0],
+        last_name: fullnameArr[fullnameArr.length - 1],
+        email: res.account.username,
+      };
+      const loginRes = await loginUser(res.accessToken, data);
+
+      // Edge case where email address is added to AD but not to the database.
+      if (loginRes.status === "fail") {
+        alert(
+          "Your account creation is not completed. Please sign out and contact your administrator.",
+        );
+        // await instance.logout();
+        return;
+      }
+
+      // Set the active account
+      instance.setActiveAccount(res.account);
+    } catch (e) {
+      console.error(e);
     }
   };
   return (
-    <DropdownButton
-      variant="secondary"
-      className="ml-auto"
-      drop="start"
-      title="Sign In"
-    >
-      <Dropdown.Item as="button" onClick={() => handleLogin("popup")}>
-        Sign in using Popup
-      </Dropdown.Item>
-      <Dropdown.Item as="button" onClick={() => handleLogin("redirect")}>
-        Sign in using Redirect
-      </Dropdown.Item>
-    </DropdownButton>
+    <span className={"btn--primary"} onClick={() => handleLogin()}>
+      Sign in
+    </span>
   );
 };

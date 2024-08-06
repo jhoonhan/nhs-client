@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { computeRoster, getComputedRoster } from "../actions";
-import { AppContext } from "../App";
+import { AppContext } from "App";
 
 const ComputeRosterForm = (props) => {
-  const { computedRoster, formData } = React.useContext(AppContext);
+  const { computedRoster, formData, isLoggedIn } = React.useContext(AppContext);
   const [computed, setComputed] = useState(false);
   const renderRosterForm = () => {
     const handleRosterFormSubmit = async (e) => {
       e.preventDefault();
       try {
         await getComputedRoster(
+          isLoggedIn.state.accessToken,
           setComputed,
           {
             month: formData.state.month,

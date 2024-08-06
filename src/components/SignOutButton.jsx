@@ -12,29 +12,19 @@ export const SignOutButton = () => {
   const handleLogout = (logoutType) => {
     if (logoutType === "popup") {
       instance.logoutPopup({
-        postLogoutRedirectUri: "/",
-        mainWindowRedirectUri: "/",
+        postLogoutRedirectUri: "http://localhost:3000",
+        mainWindowRedirectUri: "http://localhost:3000",
       });
     } else if (logoutType === "redirect") {
       instance.logoutRedirect({
-        postLogoutRedirectUri: "/",
+        postLogoutRedirectUri: "http://localhost:3000",
       });
     }
   };
 
   return (
-    <DropdownButton
-      variant="secondary"
-      className="ml-auto"
-      drop="start"
-      title="Sign Out"
-    >
-      <Dropdown.Item as="button" onClick={() => handleLogout("popup")}>
-        Sign out using Popup
-      </Dropdown.Item>
-      <Dropdown.Item as="button" onClick={() => handleLogout("redirect")}>
-        Sign out using Redirect
-      </Dropdown.Item>
-    </DropdownButton>
+    <span className={"btn--primary"} onClick={() => handleLogout("popup")}>
+      Sign Out
+    </span>
   );
 };

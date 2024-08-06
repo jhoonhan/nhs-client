@@ -17,15 +17,20 @@
 @import "roster/detail";
 @import "requestForm";
 
-.btn--primary {
+.btn {
+  width: fit-content;
   height: fit-content;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  padding: 1rem 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.btn--primary {
+  @extend .btn;
   border: 1px solid black;
-  padding: 1rem 0.5rem;
-  border-radius: 0.25rem;
-  cursor: pointer;
 }
 
 .card {
@@ -37,18 +42,18 @@
   border: 1px solid black;
   border-radius: 2rem;
 
- &.card--user {
-   display: grid;
-   grid-template-columns: auto 1fr;
-   align-items: center;
-   gap: 1rem;
+  &.card--user {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 1rem;
 
-   & .card--user__profile-picture {
-     width: 5rem;
-     aspect-ratio: 1;
-     background-color: red;
-     border-radius: 1000px;
-   }
+    & .card--user__profile-picture {
+      width: 5rem;
+      aspect-ratio: 1;
+      background-color: red;
+      border-radius: 1000px;
+    }
   }
 }
 

@@ -11,13 +11,17 @@ const RequestForm = () => {
     selectedUser,
     selectedShifts,
     unusedPriorities,
+    isLoggedIn,
   } = React.useContext(AppContext);
 
   const handleRequestFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createRequestByList(formatRequestObj(selectedShifts.state));
+      await createRequestByList(
+        formatRequestObj(isLoggedIn.state.accessToken, selectedShifts.state),
+      );
       await getComputedRoster(
+        isLoggedIn.state.accessToken,
         computedRoster.setData,
         {
           month: formData.state.month,

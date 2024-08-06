@@ -1,5 +1,6 @@
 import { useState } from "react";
-import useUnusedPriorities from "./hooks/useUnusedPriorities";
+import useUnusedPriorities from "hooks/useUnusedPriorities";
+import useSignIn from "hooks/useSignIn";
 
 const useContextValues = () => {
   const [computedRoster, setComputedRoster] = useState({
@@ -16,7 +17,7 @@ const useContextValues = () => {
     userData: {},
   });
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(1);
+  const [selectedUser, setSelectedUser] = useState(0);
   const [selectedShift, setSelectedShift] = useState(0);
   const [selectedShifts, setSelectedShifts] = useState({});
   const [formData, setFormData] = useState({
@@ -28,8 +29,15 @@ const useContextValues = () => {
     computedRoster.requests.groupedByUser,
     selectedUser,
   );
+  const isLoggedIn = useSignIn({
+    state: selectedUser,
+    setData: setSelectedUser,
+  });
 
   return {
+    isLoggedIn: {
+      state: isLoggedIn,
+    },
     computedRoster: {
       state: computedRoster,
       setData: setComputedRoster,
