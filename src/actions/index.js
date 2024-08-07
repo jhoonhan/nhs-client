@@ -151,7 +151,10 @@ export const updateShift = async (accessToken, shift_id, data) => {
 export const loginUser = async (accessToken, data) => {
   try {
     return await (
-      await fetch(`${API_URL}/login`, generateHeader("POST", accessToken))
+      await fetch(`${API_URL}/login`, {
+        ...generateHeader("POST", accessToken),
+        body: JSON.stringify(data),
+      })
     ).json();
   } catch (error) {
     console.error(error);

@@ -23,6 +23,7 @@ const useContextValues = () => {
     email: "",
     first_name: "",
     last_name: "",
+    authority: 0,
   });
   const [selectedUser, setSelectedUser] = useState(0);
   const [selectedShift, setSelectedShift] = useState(0);

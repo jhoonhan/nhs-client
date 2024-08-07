@@ -59,9 +59,21 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
 - Change selected user to contain all user data. This requires major refactoring.
   - Instead of changing `selectedUser`,`currentdUser` is added and it now contains all user data.
   - When `currentdUser` is first set by `useLogin()`, `selectedUser` is set to `currentdUser.user_id`.
-  - `selectedUser` is only used by Manager view
+  - `selectedUser` is only used by Manager view.
+
+### 8/7
 - Manager view
-  - Create view conditional rendering.
+  - Using `currentUser` state, it determines which views to show.
+  - Views to create/modify:
+    - UserSelectionForm
+    - Roster
+      - Show requests grouped by status.
+      - Ability to disapprove requests.
+      - Ability to manually select shifts for selected user.
+    - UserList
+      - Show all users.
+      - Ability to change user's information.
+      - Ability to invite user to the group.
 
 ### TODO
 - User API
