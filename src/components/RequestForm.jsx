@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppContext } from "../App";
 import { createRequestByList, getComputedRoster } from "../actions";
 import { formatRequestObj } from "../helpers/formatters";
@@ -14,11 +14,16 @@ const RequestForm = () => {
     isLoggedIn,
   } = React.useContext(AppContext);
 
+  // useEffect(() => {
+  //   console.log(selectedShifts.state);
+  // }, [selectedShifts.state]);
+
   const handleRequestFormSubmit = async (e) => {
     e.preventDefault();
     try {
       await createRequestByList(
-        formatRequestObj(isLoggedIn.state.accessToken, selectedShifts.state),
+        isLoggedIn.state.accessToken,
+        formatRequestObj(selectedShifts.state),
       );
       await getComputedRoster(
         isLoggedIn.state.accessToken,

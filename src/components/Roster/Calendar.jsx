@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import { validateShiftSelection } from "./rosterValidation";
 import { AppContext } from "App";
 import groupShifts from "helpers/groupShifts";
-import { capitalizeString, formatObjectToArray } from "helpers/formatters";
+import {
+  capitalizeString,
+  formatName,
+  formatObjectToArray,
+} from "helpers/formatters";
 import getStaffRequestNumber from "helpers/getStaffRequestNumber";
 
-const Calendar = () => {
+const Calendar = ({ isManagerView }) => {
   const {
     computedRoster,
     selectedUser,
@@ -124,7 +128,7 @@ const Calendar = () => {
         return (
           <div
             key={shift.shift_id}
-            className={`calendar__day__boxes__box 
+            className={`calendar__day__box 
                 ${shiftBoxClass(shift)}
                 ${shift.shift_id === selectedShift.state ? "detail" : ""}
               `}
@@ -138,7 +142,7 @@ const Calendar = () => {
               </span>
               {renderSelectRadio(shift)}
             </div>
-            <div className={"calendar__day__boxes__box__info"}>
+            <div className={"calendar__day__box__info flex--v flex-gap--d"}>
               <p>
                 Staffs:{" "}
                 {getStaffRequestNumber(
@@ -149,7 +153,9 @@ const Calendar = () => {
                 /{shift.min_staff}
               </p>
               <p>{capitalizeString(shift.status)}</p>
-              {/*<p>{getSelectedPriority(shift.shift_id)}</p>*/}
+              {/*  Get User Request list  */}
+              {renderUserRequestLists(shift.shift_id, "approved")}
+              {renderUserRequestLists(shift.shift_id, "pending")}
             </div>
           </div>
         );
@@ -161,6 +167,28 @@ const Calendar = () => {
         </div>
       );
     });
+  };
+
+  const renderUserRequestLists = (shift_id, status) => {
+    if (!(shift_id in computedRoster.state.requests.groupedByShift)) return;
+    const requests =
+      computedRoster.state.requests.groupedByShift[shift_id][status];
+    if (!requests || requests.length === 0) return "";
+
+    return (
+      <div className={"calendar__day__box__requests flex--v flex-gap--d"}>
+        <h4>{status} :</h4>
+        {formatObjectToArray(requests).map((request, i) => {
+          return (
+            <div key={i} className={`box__request flex--h ${status}`}>
+              <p key={request.request_id}>
+                {formatName(request.firstname, request.lastname, 1)}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   const render = () => {

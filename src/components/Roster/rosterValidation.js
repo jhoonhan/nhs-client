@@ -7,7 +7,10 @@ const getCurrentWeekSelectedCount = (
 ) => {
   let count = 0;
   Object.keys(selectedShifts.state).forEach((shift_id) => {
-    if (computedRoster.state.shifts.shifts[shift_id].week_id === week_id) {
+    if (
+      shift_id in computedRoster.state.shifts.shifts &&
+      computedRoster.state.shifts.shifts[shift_id].week_id === week_id
+    ) {
       count++;
     }
   });
@@ -88,29 +91,28 @@ export const validateShiftSelection = (
   }
 
   // Check if user has more than 3 shifts in a week
+  let userRequests = {};
   if (selectedUser.state in groupedRequestByUser) {
-    const userRequests = groupShifts(
+    userRequests = groupShifts(
       groupedRequestByUser[selectedUser.state].approved.concat(
         groupedRequestByUser[selectedUser.state].pending,
       ),
       "week",
     );
-    let userRequestForTheWeek =
-      week_id in userRequests
-        ? userRequests[week_id].length +
-          getCurrentWeekSelectedCount(
-            { selectedShifts, computedRoster },
-            week_id,
-          )
-        : getCurrentWeekSelectedCount(
-            { selectedShifts, computedRoster },
-            week_id,
-          );
-    if (userRequestForTheWeek >= MAX_REQUEST_PER_WEEK) {
-      shift.selectable = 0;
-      return;
-    }
   }
+  let userRequestForTheWeek =
+    week_id in userRequests
+      ? userRequests[week_id].length +
+        getCurrentWeekSelectedCount({ selectedShifts, computedRoster }, week_id)
+      : getCurrentWeekSelectedCount(
+          { selectedShifts, computedRoster },
+          week_id,
+        );
+  if (userRequestForTheWeek >= MAX_REQUEST_PER_WEEK) {
+    shift.selectable = 0;
+    return;
+  }
+  // }
 
   // Check if open or closed
   if (shift.status !== "open") {

@@ -1,0 +1,25 @@
+.page__user-list {
+  .user-list__users {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    ul {
+      list-style: none;
+    }
+  }
+
+  & form.uesr-list__invite-form {
+    width: min-content;
+
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 1rem;
+    row-gap: 1rem;
+
+    & input {
+      min-width: 50rem;
+    }
+
+  }
+
+}

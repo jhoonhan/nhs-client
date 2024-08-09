@@ -67,13 +67,20 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
   - Views to create/modify:
     - UserSelectionForm
     - Roster
+      - Refactor to be reused for the manager view.
       - Show requests grouped by status.
-      - Ability to disapprove requests.
-      - Ability to manually select shifts for selected user.
-    - UserList
-      - Show all users.
-      - Ability to change user's information.
-      - Ability to invite user to the group.
+        - Done by parent css className and different layout.
+    
+### 8/9
+- Manager view
+  - Refactor `Roster` to not show selected user's requests calendar.
+    - Right now the manager view shows request status calendar (Yeweon manager shows Yeweon's requests).
+  - Ability to disapprove requests.
+  - Ability to manually select shifts for selected user.
+  - UserList
+    - Show all users.
+    - Ability to change user's information.
+    - Ability to invite user to the group.
 
 ### TODO
 - User API

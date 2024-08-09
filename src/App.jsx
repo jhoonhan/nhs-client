@@ -14,6 +14,8 @@ import { Route, Switch, useLocation } from "react-router-dom";
 
 import { PageLayout } from "./components/PageLayout";
 import UserSelectionForm from "./components/UserSelectionForm";
+import { formatName } from "./helpers/formatters";
+import UserList from "./components/UserList";
 
 export const AppContext = React.createContext();
 
@@ -49,17 +51,36 @@ const App = () => {
     selectedUser.setData(currentUser.state.user_id);
   }, [currentUser.state]);
 
+  useEffect(() => {
+    // console.log(computedRoster.state);
+  }, [computedRoster.state]);
+
   return (
     <AppContext.Provider value={contextValues}>
-      <UserSelectionForm authority={currentUser.state.authority} />
       <div className="App">
         <PageLayout>
           {selectedUser.state ? (
             <div className="App">
               <AuthenticatedTemplate>
                 <Switch location={location}>
-                  <Route path="/manager" render={() => <ComputeRosterForm />} />
-                  <Route path="/roster" render={() => <Roster />} />
+                  <Route
+                    path="/manager"
+                    render={() => (
+                      <ComputeRosterForm
+                        authority={currentUser.state.authority}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/users"
+                    render={() => (
+                      <UserList authority={currentUser.state.authority} />
+                    )}
+                  />
+                  <Route
+                    path="/roster"
+                    render={() => <Roster isManagerView={false} />}
+                  />
                 </Switch>
               </AuthenticatedTemplate>
 

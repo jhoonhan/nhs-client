@@ -6,7 +6,7 @@ import RequestForm from "../RequestForm";
 import Calendar from "./Calendar";
 import RosterDetail from "./RosterDetail";
 
-const Roster = () => {
+const Roster = ({ isManagerView }) => {
   const {
     computedRoster,
     isLoggedIn,
@@ -93,7 +93,7 @@ const Roster = () => {
           </div>
           <div className={"body"}>
             <div className={"layout__main-content"}>
-              <Calendar />
+              <Calendar isManagerView={isManagerView} />
               <RequestForm />
             </div>
             <div className={"layout__detail-content"}>

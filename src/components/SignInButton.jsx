@@ -2,13 +2,11 @@ import React from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "authConfig";
 import { loginUser } from "actions";
-import { AppContext } from "App";
 
 /**
  * Renders a drop down button with child buttons for logging in with a popup or redirect
  */
 export const SignInButton = () => {
-  const { isLoggedIn } = React.useContext(AppContext);
   const { instance } = useMsal();
 
   const handleLogin = async () => {
@@ -39,8 +37,10 @@ export const SignInButton = () => {
     }
   };
   return (
-    <span className={"btn--primary"} onClick={() => handleLogin()}>
-      Sign in
-    </span>
+    <div className={"flex--h"}>
+      <span className={"btn--primary"} onClick={() => handleLogin()}>
+        Sign in
+      </span>
+    </div>
   );
 };

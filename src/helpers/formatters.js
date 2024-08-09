@@ -23,6 +23,8 @@ export const capitalizeString = (str) => {
 };
 
 export const formatName = (firstname, lastname, type) => {
+  // 1 = H. Joe
+  // 2 = Joe Han
   if (type === 1) {
     return `${capitalizeString(lastname)}, ${capitalizeString(firstname[0])}`;
   }

@@ -1,6 +1,7 @@
 div.calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  //grid-template-rows: auto repeat(7, 1fr);
   row-gap: 1rem;
   column-gap: 1rem;
 
@@ -11,10 +12,11 @@ div.calendar {
     & .calendar__day__boxes {
       height: 100%;
       display: grid;
-      grid-template-columns: 50% 50%;
+      //grid-template-columns: 50% 50%;
+      grid-template-rows: 1fr 1fr;
 
 
-      & div.calendar__day__boxes__box {
+      & div.calendar__day__box {
         width: 100%;
         height: 100%;
 
@@ -30,7 +32,7 @@ div.calendar {
         box-sizing: border-box;
 
         &:nth-child(2n) {
-          border-left: 1px solid transparent;
+          border-top: 1px solid transparent;
           margin-right: 1rem;
         }
 
@@ -67,6 +69,7 @@ div.calendar {
             border-bottom: 1px solid black;
           }
 
+
           .radio-selector {
             width: 2.5rem;
             aspect-ratio: 1;
@@ -96,6 +99,37 @@ div.calendar {
 
             &.disabled {
               background-color: transparent;
+            }
+          }
+        }
+
+        & .calendar__day__box__info {
+          & .calendar__day__box__requests {
+
+            & .box__request {
+              display: flex;
+              align-items: center;
+              border: 1px solid black;
+              padding: 0.5rem 1rem;
+              border-radius: 1rem;
+
+              & p {
+                width: 100%;
+              }
+
+              & span {
+                padding: 0.5rem;
+                text-decoration: underline;
+              }
+
+              &.approved {
+                background-color: lightblue;
+              }
+
+              &.pending {
+                background-color: lightcoral;
+              }
+
             }
           }
         }

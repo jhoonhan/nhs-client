@@ -95,10 +95,10 @@ export const createRequestByList = async (accessToken, requestList) => {
   }
 };
 
-export const fetchAllUsers = async (accessToken, { state, setData }) => {
+export const fetchAllUsers = async (accessToken, { setData }) => {
   try {
     const res = await (
-      await fetch(`${API_URL}/get-all-user`, generateHeader("GET", accessToken))
+      await fetch(`${API_URL}/user`, generateHeader("GET", accessToken))
     ).json();
     setData(res.data);
     return res;

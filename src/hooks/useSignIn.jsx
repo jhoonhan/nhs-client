@@ -17,7 +17,6 @@ const useSignIn = (currentUser) => {
     if (!isAuthenticated) return;
     const account = accounts[0];
     const ms_id = account.localAccountId;
-    console.log(ms_id);
     instance
       .acquireTokenSilent({ ...accessTokenRequest, account })
       .then(async (response) => {
