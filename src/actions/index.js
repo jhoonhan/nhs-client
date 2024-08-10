@@ -22,7 +22,7 @@ const formatRequests = ({ requests, shifts }) => {
       groupedByShift[shift_id] = {
         approved: {},
         pending: {},
-        rejected: {},
+        rejected: [],
       };
     }
   });
@@ -42,7 +42,7 @@ const formatRequests = ({ requests, shifts }) => {
       groupedByShift[request.shift_id].pending[request.user_id] = request;
       groupedByUser[request.user_id].pending.push(request);
     } else {
-      groupedByShift[request.shift_id].rejected[request.user_id] = request;
+      groupedByShift[request.shift_id].rejected.push(request);
       groupedByUser[request.user_id].rejected.push(request);
     }
   });
@@ -62,8 +62,6 @@ export const getComputedRoster = async (
         generateHeader("GET", accessToken),
       )
     ).json();
-
-    console.log(res);
 
     let requests = {};
     if (res.status === "success" && res.data) {

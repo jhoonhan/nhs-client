@@ -6,7 +6,7 @@ import RequestForm from "../RequestForm";
 import Calendar from "./Calendar";
 import RosterDetail from "./RosterDetail";
 
-const Roster = ({ isManagerView }) => {
+const Roster = ({ isManagerView, override }) => {
   const {
     computedRoster,
     isLoggedIn,
@@ -93,8 +93,8 @@ const Roster = ({ isManagerView }) => {
           </div>
           <div className={"body"}>
             <div className={"layout__main-content"}>
-              <Calendar isManagerView={isManagerView} />
-              <RequestForm />
+              <Calendar isManagerView={isManagerView} override={override} />
+              <RequestForm override={override} />
             </div>
             <div className={"layout__detail-content"}>
               <RosterDetail />

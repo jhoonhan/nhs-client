@@ -108,6 +108,8 @@ app.use(
   }),
 );
 ```
+- Manager override manual shift assignment.
+  - This must show rejected days to give suggestion. 
 - Fix login bug.
   - Using the middleware above throws error. Probably have to do with getting token then sending.
 

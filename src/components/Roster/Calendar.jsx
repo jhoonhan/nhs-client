@@ -9,7 +9,7 @@ import {
 } from "helpers/formatters";
 import getStaffRequestNumber from "helpers/getStaffRequestNumber";
 
-const Calendar = ({ isManagerView }) => {
+const Calendar = ({ isManagerView, override }) => {
   const {
     computedRoster,
     selectedUser,
@@ -114,7 +114,51 @@ const Calendar = ({ isManagerView }) => {
       </span>
     );
   };
+  const renderUserRequestLists = (shift_id, status) => {
+    if (!(shift_id in computedRoster.state.requests.groupedByShift)) return;
+    const requests =
+      computedRoster.state.requests.groupedByShift[shift_id][status];
+    if (!requests || requests.length === 0) return "";
 
+    return (
+      <div className={"calendar__day__box__requests flex--v flex-gap--d"}>
+        <h4>{status} :</h4>
+        {formatObjectToArray(requests).map((request, i) => {
+          return (
+            <div key={i} className={`box__request flex--h ${status}`}>
+              <p key={request.request_id}>
+                {formatName(request.firstname, request.lastname, 1)}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+  // 8-10 When override is on, show rejected request for manual assignment suggestions.
+  const renderRejection = (shift_id, user_id) => {
+    if (!override) return "";
+    if (!(shift_id in computedRoster.state.requests.groupedByShift)) return "";
+    const rejectedRequests = computedRoster.state.requests.groupedByShift[
+      shift_id
+    ].rejected.filter((request) => {
+      return request.user_id === user_id;
+    });
+
+    let highestRejectedPriority = null;
+    rejectedRequests.forEach((request) => {
+      highestRejectedPriority = Math.max(
+        highestRejectedPriority,
+        request.priority_user,
+      );
+    });
+
+    return highestRejectedPriority ? (
+      <p>Rejected with: {highestRejectedPriority}</p>
+    ) : (
+      ""
+    );
+  };
   const renderDayBoxes = () => {
     return Object.keys(groupedByDay).map((day_num, index) => {
       const shifts = [groupedByDay[day_num].day, groupedByDay[day_num].night];
@@ -156,6 +200,7 @@ const Calendar = ({ isManagerView }) => {
               {/*  Get User Request list  */}
               {renderUserRequestLists(shift.shift_id, "approved")}
               {renderUserRequestLists(shift.shift_id, "pending")}
+              {renderRejection(shift.shift_id, selectedUser.state)}
             </div>
           </div>
         );
@@ -167,28 +212,6 @@ const Calendar = ({ isManagerView }) => {
         </div>
       );
     });
-  };
-
-  const renderUserRequestLists = (shift_id, status) => {
-    if (!(shift_id in computedRoster.state.requests.groupedByShift)) return;
-    const requests =
-      computedRoster.state.requests.groupedByShift[shift_id][status];
-    if (!requests || requests.length === 0) return "";
-
-    return (
-      <div className={"calendar__day__box__requests flex--v flex-gap--d"}>
-        <h4>{status} :</h4>
-        {formatObjectToArray(requests).map((request, i) => {
-          return (
-            <div key={i} className={`box__request flex--h ${status}`}>
-              <p key={request.request_id}>
-                {formatName(request.firstname, request.lastname, 1)}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-    );
   };
 
   const render = () => {

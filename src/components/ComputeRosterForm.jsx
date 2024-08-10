@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { computeRoster, getComputedRoster } from "../actions";
 import { AppContext } from "App";
 import Roster from "./Roster/Roster";
@@ -7,6 +7,7 @@ import UserSelectionForm from "./UserSelectionForm";
 const ComputeRosterForm = ({ authority }) => {
   const { currentUser, formData, isLoggedIn } = React.useContext(AppContext);
   const [computed, setComputed] = useState(false);
+  const [override, setOverride] = useState(0);
 
   const handleRosterFormSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +31,18 @@ const ComputeRosterForm = ({ authority }) => {
     e.target.id === "month"
       ? formData.setData({ ...formData.state, month: value })
       : formData.setData({ ...formData.state, year: value });
+  };
+
+  const renderOverrideForm = () => {
+    return (
+      <form>
+        <label>Override: </label>
+        <select value={override} onChange={(e) => setOverride(e.target.value)}>
+          <option value={1}>On</option>
+          <option value={0}>Off</option>
+        </select>
+      </form>
+    );
   };
 
   const render = () => {
@@ -59,7 +72,8 @@ const ComputeRosterForm = ({ authority }) => {
           <p>{`Computed: ${computed}`}</p>
         </div>
         <UserSelectionForm authority={currentUser.state.authority} />
-        <Roster isManagerView={true} />
+        {renderOverrideForm()}
+        <Roster isManagerView={true} override={override} />
       </div>
     );
   };
