@@ -90,6 +90,8 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
       - Now this will make default user to `pending` status and when user logs in for the first time and `ms-id` is updated, change the status to `active`.
     - Currently invitation is made in frontend. Move this to backend so that it's more secure.
       - Now the invitation is sent from the backend. Credentials are stored in .env file for security.
+- Fix JWT authorization in the backend.
+  - Research and write about it.
 
 
 ### TODO
@@ -100,7 +102,8 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
 - Bug fix when other month is selected.
   - Default values probably not set correctly.
 - Manager view
-- Fix JWT authorization in the backend.
+- Server sequrity measures
+- Deployment
 
 ### Backlog
 - Scheduling algorithm records its computation result data each time it is run to `compute_record` table.

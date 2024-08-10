@@ -86,7 +86,7 @@ const UserList = ({ authority }) => {
   const render = () => {
     if (authority < 2) return <h3>No access.</h3>;
     return (
-      <div className={"page__user-list"}>
+      <div className={"page__user-list flex--v flex-gap--lg"}>
         <div>
           <h3>Users:</h3>
           <div className={"user-list__users"}>{renderUsers()}</div>

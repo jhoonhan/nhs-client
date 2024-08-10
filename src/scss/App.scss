@@ -12,6 +12,14 @@
   gap: 1rem;
 }
 
+.flex-gap--md {
+  gap: 2rem;
+}
+
+.flex-gap--lg {
+  gap: 4rem;
+}
+
 @import "layout";
 @import "roster/calendar";
 @import "roster/detail";
