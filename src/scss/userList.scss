@@ -2,13 +2,30 @@
   .user-list__users {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
 
     ul {
       list-style: none;
+      border: 1px solid black;
+      padding: 1rem;
+      cursor: pointer;
+
+      &.active {
+        border: 2px solid red;
+      }
+
+      &.disabled {
+        background-color: #ccc;
+        opacity: 0.5;
+      }
+
+      &.pending {
+        background-color: lightgreen;
+      }
     }
   }
 
-  & form.uesr-list__invite-form {
+  & form.user-list__invite-form {
     width: min-content;
 
     display: grid;

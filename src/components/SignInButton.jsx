@@ -18,6 +18,7 @@ export const SignInButton = () => {
         first_name: fullnameArr[0],
         last_name: fullnameArr[fullnameArr.length - 1],
         email: res.account.username,
+        status: "active",
       };
       const loginRes = await loginUser(res.accessToken, data);
 

@@ -161,3 +161,31 @@ export const loginUser = async (accessToken, data) => {
     throw error;
   }
 };
+
+export const inviteUser = async (accessToken, data) => {
+  try {
+    return await (
+      await fetch(`${API_URL}/invite`, {
+        ...generateHeader("POST", accessToken),
+        body: JSON.stringify(data),
+      })
+    ).json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const putMethod = async (accessToken, url, data) => {
+  try {
+    return await (
+      await fetch(`${API_URL}/${url}`, {
+        ...generateHeader("PUT", accessToken),
+        body: JSON.stringify(data),
+      })
+    ).json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

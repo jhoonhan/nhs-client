@@ -7,30 +7,34 @@ import UserSelectionForm from "./UserSelectionForm";
 const ComputeRosterForm = ({ authority }) => {
   const { currentUser, formData, isLoggedIn } = React.useContext(AppContext);
   const [computed, setComputed] = useState(false);
-  const renderRosterForm = () => {
-    const handleRosterFormSubmit = async (e) => {
-      e.preventDefault();
-      try {
-        await getComputedRoster(
-          isLoggedIn.state.accessToken,
-          setComputed,
-          {
-            month: formData.state.month,
-            year: formData.state.year,
-          },
-          1,
-        );
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    };
-    const handleRosterFormChange = (e) => {
-      const { value } = e.target;
-      e.target.id === "month"
-        ? formData.setData({ ...formData.state, month: value })
-        : formData.setData({ ...formData.state, year: value });
-    };
+
+  const handleRosterFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await getComputedRoster(
+        isLoggedIn.state.accessToken,
+        setComputed,
+        {
+          month: formData.state.month,
+          year: formData.state.year,
+        },
+        1,
+      );
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+  const handleRosterFormChange = (e) => {
+    const { value } = e.target;
+    e.target.id === "month"
+      ? formData.setData({ ...formData.state, month: value })
+      : formData.setData({ ...formData.state, year: value });
+  };
+
+  const render = () => {
+    if (authority < 2) return <h2>No access.</h2>;
+
     return (
       <div className={"flex--v flex-gap--d"}>
         <h2>Compute Roster</h2>
@@ -59,7 +63,7 @@ const ComputeRosterForm = ({ authority }) => {
       </div>
     );
   };
-  return authority ? renderRosterForm() : <h2>Do not have access.</h2>;
+  return render();
 };
 
 export default ComputeRosterForm;

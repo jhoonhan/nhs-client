@@ -79,8 +79,18 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
   - Ability to manually select shifts for selected user.
   - UserList
     - Show all users.
-    - Ability to change user's information.
     - Ability to invite user to the group.
+
+### 8/10
+- Manager view
+  - UserList
+    - Ability to change user's information.
+    - Ability to delete user.
+      - This will make user `inactive` and not show up in the user list.
+      - Now this will make default user to `pending` status and when user logs in for the first time and `ms-id` is updated, change the status to `active`.
+    - Currently invitation is made in frontend. Move this to backend so that it's more secure.
+      - Now the invitation is sent from the backend. Credentials are stored in .env file for security.
+
 
 ### TODO
 - User API

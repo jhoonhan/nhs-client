@@ -12,10 +12,8 @@ import ComputeRosterForm from "components/ComputeRosterForm";
 import useContextValues from "./useContextValues";
 import { Route, Switch, useLocation } from "react-router-dom";
 
-import { PageLayout } from "./components/PageLayout";
-import UserSelectionForm from "./components/UserSelectionForm";
-import { formatName } from "./helpers/formatters";
-import UserList from "./components/UserList";
+import { PageLayout } from "components/PageLayout";
+import UserList from "components/UserList/UserList";
 
 export const AppContext = React.createContext();
 

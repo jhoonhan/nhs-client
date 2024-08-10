@@ -46,7 +46,7 @@ const UserSelectionForm = ({ authority }) => {
   };
 
   const render = () => {
-    if (!authority) return <></>;
+    if (authority < 2) return <h2>No access.</h2>;
     return (
       <>
         <h2>Select User</h2>
