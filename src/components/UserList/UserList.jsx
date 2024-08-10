@@ -32,10 +32,6 @@ const UserList = ({ authority }) => {
     // 8-10 each time update is made, it triggers the parent component to fetch all users again.
   }, [triggerGetAllUser]);
 
-  // useEffect(() => {
-  //   console.log(selectedPageUser);
-  // }, [selectedPageUser]);
-
   const getUserData = (user_id) => {
     return users.state.find((user) => user.user_id === user_id);
   };
@@ -46,9 +42,9 @@ const UserList = ({ authority }) => {
       if (selectedPageUser.user_id === user.user_id) {
         className.push("active");
       }
-      if (user.status === "inactive") {
+      if (user.user_status === "inactive") {
         className.push("disabled");
-      } else if (user.status === "pending") {
+      } else if (user.user_status === "pending") {
         className.push("pending");
       }
       return className.join(" ");

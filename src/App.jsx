@@ -50,7 +50,7 @@ const App = () => {
   }, [currentUser.state]);
 
   useEffect(() => {
-    // console.log(computedRoster.state);
+    console.log(computedRoster.state);
   }, [computedRoster.state]);
 
   return (

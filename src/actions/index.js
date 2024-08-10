@@ -63,6 +63,8 @@ export const getComputedRoster = async (
       )
     ).json();
 
+    console.log(res);
+
     let requests = {};
     if (res.status === "success" && res.data) {
       requests = formatRequests(res.data);
@@ -82,6 +84,7 @@ export const getComputedRoster = async (
  * @returns {Promise<void>}
  */
 export const createRequestByList = async (accessToken, requestList) => {
+  console.log(requestList);
   try {
     const res = await server.post(
       "/request/create-by-list",
@@ -118,8 +121,6 @@ export const fetchAllUsers = async (accessToken, { setData }) => {
  * @returns {Promise<any>}
  */
 export const fetchUserById = async (accessToken, id, id_type, { setData }) => {
-  console.log("id");
-  console.log(id);
   try {
     const res = await (
       await fetch(

@@ -92,6 +92,24 @@ To do this, the scheduling algorithm needs to know which `user_priority` is left
       - Now the invitation is sent from the backend. Credentials are stored in .env file for security.
 - Fix JWT authorization in the backend.
   - Research and write about it.
+```javascript
+// 8-10 JWT Authorization middleware
+app.use(
+  expressjwt({
+    secret: expressJwtSecret({
+      jwksUri:
+        "https://login.microsoftonline.com/" +
+        process.env.TENANT_ID +
+        "/discovery/v2.0/keys",
+      }),
+    audience: process.env.API_SCOPE,
+    issuer: `https://sts.windows.net/${process.env.TENANT_ID}/`,
+    algorithms: ["RS256"],
+  }),
+);
+```
+- Fix login bug.
+  - Using the middleware above throws error. Probably have to do with getting token then sending.
 
 
 ### TODO

@@ -7,7 +7,7 @@ const UserUpdateForm = ({ selectedFormUser, accessToken, trigger }) => {
   const [email, setEmail] = useState("");
   const [band, setBand] = useState(4);
   const [seniority, setSeniority] = useState(0);
-  const [status, setStatus] = useState("pending");
+  const [userStatus, setUserStatus] = useState("pending");
 
   useEffect(() => {
     setFirstname(selectedFormUser.firstname);
@@ -15,7 +15,7 @@ const UserUpdateForm = ({ selectedFormUser, accessToken, trigger }) => {
     setEmail(selectedFormUser.email);
     setBand(selectedFormUser.band);
     setSeniority(selectedFormUser.seniority);
-    setStatus(selectedFormUser.status);
+    setUserStatus(selectedFormUser.user_status);
   }, [selectedFormUser]);
 
   const handleSubmit = async (e) => {
@@ -27,9 +27,9 @@ const UserUpdateForm = ({ selectedFormUser, accessToken, trigger }) => {
         return selectedFormUser.authority;
       }
 
-      if (status === "inactive") {
+      if (userStatus === "inactive") {
         return 0;
-      } else if (status === "active") {
+      } else if (userStatus === "active") {
         return 1;
       } else {
         return 0;
@@ -45,7 +45,7 @@ const UserUpdateForm = ({ selectedFormUser, accessToken, trigger }) => {
         band,
         seniority,
         ms_id: selectedFormUser.ms_id,
-        status: status,
+        user_status: userStatus,
         authority: authorityLevel(),
       });
       // 8-10 each time update is made, it triggers the parent component to fetch all users again.
@@ -104,7 +104,10 @@ const UserUpdateForm = ({ selectedFormUser, accessToken, trigger }) => {
           />
 
           <label>Status:</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <select
+            value={userStatus}
+            onChange={(e) => setUserStatus(e.target.value)}
+          >
             <option value={"active"}>active</option>
             <option value={"pending"}>pending</option>
             <option value={"inactive"}>inactive</option>
