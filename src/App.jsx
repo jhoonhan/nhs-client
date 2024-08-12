@@ -49,10 +49,6 @@ const App = () => {
     selectedUser.setData(currentUser.state.user_id);
   }, [currentUser.state]);
 
-  useEffect(() => {
-    console.log(computedRoster.state);
-  }, [computedRoster.state]);
-
   return (
     <AppContext.Provider value={contextValues}>
       <div className="App">

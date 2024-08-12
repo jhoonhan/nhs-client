@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { AppContext } from "../App";
-import { createRequestByList, getComputedRoster } from "../actions";
+import {
+  createRequestByList,
+  getComputedRoster,
+  overrideCreateRequestByList,
+} from "../actions";
 import { formatRequestObj } from "../helpers/formatters";
 import getShiftdate from "../helpers/getShiftDate";
 
-const RequestForm = () => {
+const RequestForm = ({ override }) => {
   const {
     computedRoster,
     formData,
@@ -14,17 +18,24 @@ const RequestForm = () => {
     isLoggedIn,
   } = React.useContext(AppContext);
 
-  // useEffect(() => {
-  //   console.log(selectedShifts.state);
-  // }, [selectedShifts.state]);
+  useEffect(() => {}, []);
 
   const handleRequestFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createRequestByList(
-        isLoggedIn.state.accessToken,
-        formatRequestObj(selectedShifts.state),
-      );
+      // 8-12 override request creation
+      // A new action is necessary as rejected requests are not removed from the list
+      if (!override) {
+        await createRequestByList(
+          isLoggedIn.state.accessToken,
+          formatRequestObj(selectedShifts.state),
+        );
+      } else {
+        await overrideCreateRequestByList(
+          isLoggedIn.state.accessToken,
+          formatRequestObj(selectedShifts.state),
+        );
+      }
       await getComputedRoster(
         isLoggedIn.state.accessToken,
         computedRoster.setData,

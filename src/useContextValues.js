@@ -27,7 +27,7 @@ const useContextValues = () => {
   });
   const [selectedUser, setSelectedUser] = useState(0);
   const [selectedShift, setSelectedShift] = useState(0);
-  const [selectedShifts, setSelectedShifts] = useState({});
+  const [selectedShifts, setSelectedShifts] = useState([]);
   const [formData, setFormData] = useState({
     month: 8,
     year: 2024,

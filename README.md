@@ -108,11 +108,15 @@ app.use(
   }),
 );
 ```
+
+### 8/11
 - Manager override manual shift assignment.
   - This must show rejected days to give suggestion. 
+  - Changing request to `rejected` status causes duplicate error when request is sumitted on next round of computation.
+    - Record computation record_id on each request.
+    - Change the alogrithm to store computation result data each time it is run.
 - Fix login bug.
   - Using the middleware above throws error. Probably have to do with getting token then sending.
-
 
 ### TODO
 - User API

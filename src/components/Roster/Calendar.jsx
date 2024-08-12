@@ -58,8 +58,17 @@ const Calendar = ({ isManagerView, override }) => {
   };
 
   const handleDaySelectClick = (e, { shift_id, selectable }) => {
+    e.stopPropagation();
+
+    // 8-10 override allows manual assignment of shifts even on closed shifts
     if (!(shift_id in selectedShifts.state)) {
-      if (selectable !== 1 || unusedPriorities.state.length === 0) {
+      if (
+        !override &&
+        (selectable !== 1 || unusedPriorities.state.length === 0)
+      ) {
+        return;
+      }
+      if (unusedPriorities.state.length === 0) {
         return;
       }
       selectedShifts.setData({
@@ -94,7 +103,8 @@ const Calendar = ({ isManagerView, override }) => {
       status = "selected";
     }
 
-    if (shift.selectable !== 1) {
+    // 8-11 Override allows manual assignment of shifts even on closed shifts
+    if (!override && shift.selectable !== 1) {
       return (
         <span className={`radio-selector disabled`}>
           {getSelectedPriority(shift.shift_id)}
@@ -106,7 +116,6 @@ const Calendar = ({ isManagerView, override }) => {
       <span
         className={`radio-selector ${status}`}
         onClick={(e) => {
-          e.stopPropagation();
           handleDaySelectClick(e, shift);
         }}
       >
@@ -135,7 +144,7 @@ const Calendar = ({ isManagerView, override }) => {
       </div>
     );
   };
-  // 8-10 When override is on, show rejected request for manual assignment suggestions.
+  // 8-11 When override is on, show rejected request for manual assignment suggestions.
   const renderRejection = (shift_id, user_id) => {
     if (!override) return "";
     if (!(shift_id in computedRoster.state.requests.groupedByShift)) return "";

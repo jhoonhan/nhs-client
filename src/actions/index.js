@@ -82,10 +82,23 @@ export const getComputedRoster = async (
  * @returns {Promise<void>}
  */
 export const createRequestByList = async (accessToken, requestList) => {
-  console.log(requestList);
   try {
     const res = await server.post(
       "/request/create-by-list",
+      requestList,
+      generateHeader("POST", accessToken),
+    );
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const overrideCreateRequestByList = async (accessToken, requestList) => {
+  try {
+    const res = await server.post(
+      "/request/create-by-list-override",
       requestList,
       generateHeader("POST", accessToken),
     );
