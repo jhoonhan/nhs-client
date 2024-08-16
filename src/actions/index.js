@@ -1,6 +1,5 @@
 import { API_URL } from "../config";
 import server from "../server";
-import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 
 const generateHeader = (method, accessToken) => {
   return {
@@ -79,26 +78,17 @@ export const getComputedRoster = async (
  * Create requests in batch by list
  * @param accessToken string
  * @param requestList array
+ * @param override boolean
  * @returns {Promise<void>}
  */
-export const createRequestByList = async (accessToken, requestList) => {
+export const createRequestByList = async (
+  accessToken,
+  requestList,
+  override,
+) => {
   try {
     const res = await server.post(
-      "/request/create-by-list",
-      requestList,
-      generateHeader("POST", accessToken),
-    );
-    return res.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-export const overrideCreateRequestByList = async (accessToken, requestList) => {
-  try {
-    const res = await server.post(
-      "/request/create-by-list-override",
+      `/request/create-by-list${override ? "/override" : ""}`,
       requestList,
       generateHeader("POST", accessToken),
     );
@@ -151,7 +141,7 @@ export const fetchUserById = async (accessToken, id, id_type, { setData }) => {
 export const loginUser = async (accessToken, data) => {
   try {
     return await (
-      await fetch(`${API_URL}/login`, {
+      await fetch(`${API_URL}/user/login`, {
         ...generateHeader("POST", accessToken),
         body: JSON.stringify(data),
       })
@@ -165,7 +155,7 @@ export const loginUser = async (accessToken, data) => {
 export const inviteUser = async (accessToken, data) => {
   try {
     return await (
-      await fetch(`${API_URL}/invite`, {
+      await fetch(`${API_URL}/user/invite`, {
         ...generateHeader("POST", accessToken),
         body: JSON.stringify(data),
       })
