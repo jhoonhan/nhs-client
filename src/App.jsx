@@ -1,5 +1,5 @@
 import "./scss/App.scss";
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect } from "react";
 
 import {
   AuthenticatedTemplate,
