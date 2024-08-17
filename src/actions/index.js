@@ -88,7 +88,7 @@ export const createRequestByList = async (
 ) => {
   try {
     const res = await server.post(
-      `/request/create-by-list${override ? "/override" : ""}`,
+      `/request/${override ? "1" : "0"}`,
       requestList,
       generateHeader("POST", accessToken),
     );
