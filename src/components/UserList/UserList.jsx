@@ -57,19 +57,21 @@ const UserList = ({ authority }) => {
           onClick={() => setSelectedPageUser(getUserData(user.user_id))}
         >
           <li>
-            <p>Name: {formatName(user.firstname, user.lastname, 2)}</p>
+            <p>
+              <strong>{formatName(user.firstname, user.lastname, 2)}</strong>
+            </p>
           </li>
           <li>
-            <p>Email: {user.email}</p>
+            <p>{user.email}</p>
           </li>
           <li>
-            <p>Band: {user.band}</p>
+            <p>Band {user.band}</p>
           </li>
           <li>
-            <p>Id: {user.user_id}</p>
+            <p>ID: {user.user_id}</p>
           </li>
           <li>
-            <p>Status: {user.status}</p>
+            <p>Status: {user.user_status}</p>
           </li>
           <li>
             <p>Authority: {user.authority}</p>
@@ -82,9 +84,9 @@ const UserList = ({ authority }) => {
   const render = () => {
     if (authority < 2) return <h3>No access.</h3>;
     return (
-      <div className={"page__user-list flex--v flex-gap--lg"}>
+      <div className={"page__user-list component"}>
+        <h2>Users</h2>
         <div>
-          <h3>Users:</h3>
           <div className={"user-list__users"}>{renderUsers()}</div>
         </div>
         {

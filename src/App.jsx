@@ -42,6 +42,8 @@ const App = () => {
     selectedShifts.setData([]);
   }, [selectedUser.state]);
 
+  useEffect(() => {}, [contextValues]);
+
   // 8/6 - When logged in, it first sets the selected user to the current user.
   useEffect(() => {
     selectedUser.setData(currentUser.state.user_id);
@@ -51,36 +53,38 @@ const App = () => {
     <AppContext.Provider value={contextValues}>
       <div className="App">
         <PageLayout>
-          <AuthenticatedTemplate>
-            <Switch location={location}>
-              <Route
-                path="/manager"
-                render={() => (
-                  <ComputeRosterForm authority={currentUser.state.authority} />
-                )}
-              />
-              <Route
-                path="/users"
-                render={() => (
-                  <UserList authority={currentUser.state.authority} />
-                )}
-              />
-              <Route
-                path="/roster"
-                render={() => <Roster isManagerView={false} />}
-              />
-            </Switch>
-          </AuthenticatedTemplate>
+          {selectedUser.state ? (
+            <>
+              <AuthenticatedTemplate>
+                <Switch location={location}>
+                  <Route
+                    path="/manager"
+                    render={() => (
+                      <ComputeRosterForm
+                        authority={currentUser.state.authority}
+                      />
+                    )}
+                  />
+                  <Route
+                    path="/users"
+                    render={() => (
+                      <UserList authority={currentUser.state.authority} />
+                    )}
+                  />
+                  <Route
+                    path="/roster"
+                    render={() => <Roster isManagerView={false} />}
+                  />
+                </Switch>
+              </AuthenticatedTemplate>
 
-          <UnauthenticatedTemplate>
-            <div className={"please-sign-in"}>
-              <h3>Sign in using the UHB email address.</h3>
-              <p>
-                If you have not recevied an invitation email, notify your
-                manager asap.
-              </p>
-            </div>
-          </UnauthenticatedTemplate>
+              <UnauthenticatedTemplate>
+                <h1>Please sign in</h1>
+              </UnauthenticatedTemplate>
+            </>
+          ) : (
+            <h1>Please Log in</h1>
+          )}
         </PageLayout>
       </div>
     </AppContext.Provider>
