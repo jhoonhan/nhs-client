@@ -84,22 +84,24 @@ const UserList = ({ authority }) => {
   const render = () => {
     if (authority < 2) return <h3>No access.</h3>;
     return (
-      <div className={"page__user-list component"}>
+      <div className={"page__user-list component layout--two-column-detail"}>
         <h2>Users</h2>
-        <div>
-          <div className={"user-list__users"}>{renderUsers()}</div>
+        <div className={"body"}>
+          <div className={"layout__main-content flex--v flex-gap--md"}>
+            <div className={"user-list__users"}>{renderUsers()}</div>
+          </div>
+          <div className={"layout__detail-content flex--v flex-gap--md"}>
+            <UserUpdateForm
+              selectedFormUser={selectedPageUser}
+              accessToken={isLoggedIn.state.accessToken}
+              trigger={{
+                state: triggerGetAllUser,
+                setData: setTriggerGetAllUser,
+              }}
+            />
+            {<UserInvitationForm />}
+          </div>
         </div>
-        {
-          <UserUpdateForm
-            selectedFormUser={selectedPageUser}
-            accessToken={isLoggedIn.state.accessToken}
-            trigger={{
-              state: triggerGetAllUser,
-              setData: setTriggerGetAllUser,
-            }}
-          />
-        }
-        {<UserInvitationForm />}
       </div>
     );
   };

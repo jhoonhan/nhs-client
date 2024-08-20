@@ -48,9 +48,9 @@ div.App {
 
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 2rem;
 
   border: 1px solid black;
 
@@ -61,12 +61,27 @@ div.App {
   & .navbar-collapse {
     width: 100%;
 
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     justify-content: center;
     align-items: center;
 
-    padding: 1rem;
-    border-bottom: 1px solid black;
+    padding: 1rem 4rem;
+
+    & .nav__sign-buttons {
+      justify-self: flex-end;
+    }
+
+    .home__menu {
+      & a {
+        color: black;
+        font-weight: bold;
+        text-transform: capitalize;
+        text-decoration: none;
+        border-bottom: 1px solid black;
+        padding: 1rem 0rem;
+      }
+    }
   }
 
   & .profileContent {
@@ -125,3 +140,4 @@ select {
   padding: 1rem;
   border-radius: 2rem;
 }
+

@@ -42,17 +42,24 @@ const App = () => {
     selectedShifts.setData([]);
   }, [selectedUser.state]);
 
-  useEffect(() => {}, [contextValues]);
-
   // 8/6 - When logged in, it first sets the selected user to the current user.
   useEffect(() => {
     selectedUser.setData(currentUser.state.user_id);
-  }, [currentUser.state]);
+  }, [currentUser.state.user_id]);
+
+  const renderUnauthirized = () => (
+    <div className={"please-sign-in"}>
+      <h3>Sign in using the UHB email address.</h3>
+      <p>
+        If you have not recevied an invitation email, notify your manager asap.
+      </p>
+    </div>
+  );
 
   return (
     <AppContext.Provider value={contextValues}>
       <div className="App">
-        <PageLayout>
+        <PageLayout currentUser={currentUser.state}>
           {selectedUser.state ? (
             <>
               <AuthenticatedTemplate>
@@ -79,11 +86,11 @@ const App = () => {
               </AuthenticatedTemplate>
 
               <UnauthenticatedTemplate>
-                <h1>Please sign in</h1>
+                {renderUnauthirized()}
               </UnauthenticatedTemplate>
             </>
           ) : (
-            <h1>Please Log in</h1>
+            <>{renderUnauthirized()}</>
           )}
         </PageLayout>
       </div>

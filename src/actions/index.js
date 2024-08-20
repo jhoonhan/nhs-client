@@ -121,7 +121,7 @@ export const fetchAllUsers = async (accessToken, { setData }) => {
  * @param setData
  * @returns {Promise<any>}
  */
-export const fetchUserById = async (accessToken, id, id_type, { setData }) => {
+export const fetchUserById = async (accessToken, id, id_type) => {
   try {
     const res = await (
       await fetch(
@@ -130,7 +130,6 @@ export const fetchUserById = async (accessToken, id, id_type, { setData }) => {
       )
     ).json();
     if (!res.data) throw new Error("No user found");
-    setData(res.data);
     return res;
   } catch (error) {
     console.error(error);

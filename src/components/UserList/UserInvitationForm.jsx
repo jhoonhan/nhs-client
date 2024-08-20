@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { inviteUser } from "../../actions";
 import { useMsal } from "@azure/msal-react";
+import { AppContext } from "../../App";
 
 const UserInvitationForm = () => {
   const { instance, accounts } = useMsal();
+  const { isLoggedIn } = React.useContext(AppContext);
 
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
@@ -14,7 +16,7 @@ const UserInvitationForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await inviteUser(accounts[0].localAccountId, {
+      const res = await inviteUser(isLoggedIn.state.accessToken, {
         firstname,
         lastname,
         email,

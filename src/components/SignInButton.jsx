@@ -2,6 +2,11 @@ import React from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "authConfig";
 import { signInUser } from "actions";
+import { API_GENERAL_ACCESS } from "../config";
+
+const accessTokenRequest = {
+  scopes: [API_GENERAL_ACCESS], // replace with your API's scope
+};
 
 /**
  * Renders a drop down button with child buttons for logging in with a popup or redirect
@@ -20,7 +25,12 @@ export const SignInButton = () => {
         email: res.account.username,
         status: "active",
       };
-      const loginRes = await signInUser(res.accessToken, data);
+
+      const tokenRes = await instance.acquireTokenSilent({
+        ...accessTokenRequest,
+        account: res.account,
+      });
+      const loginRes = await signInUser(tokenRes.accessToken, data);
 
       // Edge case where email address is added to AD but not to the database.
       if (loginRes.status === "fail") {

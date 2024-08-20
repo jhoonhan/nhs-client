@@ -17,14 +17,7 @@ const useContextValues = () => {
     userData: {},
   });
   const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState({
-    user_id: 0,
-    ms_id: 0,
-    email: "",
-    first_name: "",
-    last_name: "",
-    authority: 0,
-  });
+
   const [selectedUser, setSelectedUser] = useState(0);
   const [selectedShift, setSelectedShift] = useState(0);
   const [selectedShifts, setSelectedShifts] = useState([]);
@@ -32,19 +25,21 @@ const useContextValues = () => {
     month: 8,
     year: 2024,
   });
+  const [accessToken, setAccessToken] = useState(null);
 
   const [unusedPriorities, setUnusedPriorities] = useUnusedPriorities(
     computedRoster.requests.groupedByUser,
     selectedUser,
   );
-  const isLoggedIn = useSignIn({
-    state: currentUser,
-    setData: setCurrentUser,
-  });
+  const isLoggedIn = useSignIn();
 
   return {
     isLoggedIn: {
       state: isLoggedIn,
+    },
+    accessToken: {
+      state: accessToken,
+      setData: setAccessToken,
     },
     computedRoster: {
       state: computedRoster,
@@ -55,8 +50,7 @@ const useContextValues = () => {
       setData: setUsers,
     },
     currentUser: {
-      state: currentUser,
-      setData: setCurrentUser,
+      state: isLoggedIn.currentUser,
     },
     selectedUser: {
       state: selectedUser,

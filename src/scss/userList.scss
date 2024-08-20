@@ -1,12 +1,15 @@
 .page__user-list {
   .user-list__users {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 2rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
 
     ul {
       list-style: none;
-      padding: 2rem;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+
+      padding: 1rem 2rem;
       border: 1px solid black;
       border-radius: 2rem;
       cursor: pointer;
