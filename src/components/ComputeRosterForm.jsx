@@ -35,13 +35,18 @@ const ComputeRosterForm = ({ authority }) => {
 
   const renderOverrideForm = () => {
     return (
-      <form>
-        <label>Override: </label>
-        <select value={override} onChange={(e) => setOverride(e.target.value)}>
-          <option value={1}>On</option>
-          <option value={0}>Off</option>
-        </select>
-      </form>
+      <div className={"component"}>
+        <h2>Override</h2>
+        <form>
+          <select
+            value={override}
+            onChange={(e) => setOverride(e.target.value)}
+          >
+            <option value={1}>On</option>
+            <option value={0}>Off</option>
+          </select>
+        </form>
+      </div>
     );
   };
 
@@ -49,30 +54,34 @@ const ComputeRosterForm = ({ authority }) => {
     if (authority < 2) return <h2>No access.</h2>;
 
     return (
-      <div className={"flex--v flex-gap--d"}>
-        <h2>Compute Roster</h2>
-        <form onSubmit={handleRosterFormSubmit}>
-          <label htmlFor="month">Month : </label>
-          <input
-            type="number"
-            value={formData.state.month}
-            id={"month"}
-            onChange={(e) => handleRosterFormChange(e)}
-          />
-          <label htmlFor="month">Year : </label>
-          <input
-            type="number"
-            value={formData.state.year}
-            id={"year"}
-            onChange={(e) => handleRosterFormChange(e)}
-          />
-          <button type="submit">Submit</button>
-        </form>
-        <div>
-          <p>{`Computed: ${computed}`}</p>
+      <div className={"flex--v flex-gap--md"}>
+        <div className={"component"}>
+          <h2>Compute Roster</h2>
+          <form onSubmit={handleRosterFormSubmit} className={"two-column"}>
+            <label htmlFor="month">Month : </label>
+            <input
+              type="number"
+              value={formData.state.month}
+              id={"month"}
+              onChange={(e) => handleRosterFormChange(e)}
+            />
+            <label htmlFor="month">Year : </label>
+            <input
+              type="number"
+              value={formData.state.year}
+              id={"year"}
+              onChange={(e) => handleRosterFormChange(e)}
+            />
+            <button type="submit" className={"btn--primary"}>
+              Submit
+            </button>
+          </form>
         </div>
-        <UserSelectionForm authority={currentUser.state.authority} />
-        {renderOverrideForm()}
+
+        <div className={"flex--h flex-gap--md"}>
+          <UserSelectionForm authority={currentUser.state.authority} />
+          {renderOverrideForm()}
+        </div>
         <Roster isManagerView={true} override={override} />
       </div>
     );

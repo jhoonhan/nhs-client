@@ -1,7 +1,7 @@
 import React from "react";
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "authConfig";
-import { loginUser } from "actions";
+import { signInUser } from "actions";
 
 /**
  * Renders a drop down button with child buttons for logging in with a popup or redirect
@@ -20,7 +20,7 @@ export const SignInButton = () => {
         email: res.account.username,
         status: "active",
       };
-      const loginRes = await loginUser(res.accessToken, data);
+      const loginRes = await signInUser(res.accessToken, data);
 
       // Edge case where email address is added to AD but not to the database.
       if (loginRes.status === "fail") {

@@ -63,7 +63,7 @@ const UserUpdateForm = ({ selectedFormUser, accessToken, trigger }) => {
     } else {
       return (
         <form
-          className={"user-list__invite-form"}
+          className={"two-column"}
           onSubmit={(e) => handleSubmit(e, "update")}
         >
           <label>Firstname:</label>
@@ -113,14 +113,16 @@ const UserUpdateForm = ({ selectedFormUser, accessToken, trigger }) => {
             <option value={"inactive"}>inactive</option>
           </select>
 
-          <button type={"submit"}>Submit</button>
+          <button type={"submit"} className={"btn--primary"}>
+            Submit
+          </button>
         </form>
       );
     }
   };
   return (
-    <div>
-      <h3>Update User:</h3>
+    <div className={"component"}>
+      <h2>Update User:</h2>
       {renderForm()}
     </div>
   );

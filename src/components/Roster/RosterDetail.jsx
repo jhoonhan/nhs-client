@@ -66,7 +66,6 @@ const RosterDetail = () => {
     return (
       <div className={"roster-detail__content"}>
         <div className={"roster-detail__content__info"}>
-          <h4>Shift Information:</h4>
           <div className={"card"}>
             <div className={"roster-detail__content__info flex--v"}>
               <span>{`Shift Id: ${shift_id}`}</span>
@@ -111,7 +110,8 @@ const RosterDetail = () => {
 
   const render = () => {
     return (
-      <div className={"component__roster-detail flex--v"}>
+      <div className={"component__roster-detail component flex--v"}>
+        <h2>Shift Information</h2>
         {renderDetailInfo()}
       </div>
     );

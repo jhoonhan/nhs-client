@@ -32,9 +32,9 @@ const UserInvitationForm = () => {
 
   const render = () => {
     return (
-      <div>
-        <h3>Invite New User:</h3>
-        <form className={"user-list__invite-form"} onSubmit={handleSubmit}>
+      <div className={"component"}>
+        <h2>Invite New User</h2>
+        <form className={"two-column"} onSubmit={handleSubmit}>
           <label>Firstname:</label>
           <input
             type={"text"}
@@ -74,7 +74,9 @@ const UserInvitationForm = () => {
             value={seniority}
             onChange={(e) => setSeniority(e.target.value)}
           />
-          <button type={"submit"}>Invite</button>
+          <button type={"submit"} className={"btn--primary"}>
+            Invite
+          </button>
         </form>
       </div>
     );

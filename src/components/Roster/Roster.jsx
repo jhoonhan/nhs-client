@@ -63,36 +63,38 @@ const Roster = ({ isManagerView, override }) => {
 
   const renderCalendarSelectForm = () => {
     return (
-      <form onSubmit={handleRosterFormSubmit}>
-        <label htmlFor="month">Month : </label>
-        <input
-          type="number"
-          value={formData.state.month}
-          id={"month"}
-          onChange={(e) => handleRosterFormChange(e)}
-        />
-        <label htmlFor="month">Year : </label>
-        <input
-          type="number"
-          value={formData.state.year}
-          id={"year"}
-          onChange={(e) => handleRosterFormChange(e)}
-        />
-        <button type="submit">Submit</button>
-      </form>
+      <div className={"component"}>
+        <form onSubmit={handleRosterFormSubmit} className={"two-column"}>
+          <label htmlFor="month">Month : </label>
+          <input
+            type="number"
+            value={formData.state.month}
+            id={"month"}
+            onChange={(e) => handleRosterFormChange(e)}
+          />
+          <label htmlFor="month">Year : </label>
+          <input
+            type="number"
+            value={formData.state.year}
+            id={"year"}
+            onChange={(e) => handleRosterFormChange(e)}
+          />
+          <button type="submit" className={"btn--primary"}>
+            Submit
+          </button>
+        </form>
+      </div>
     );
   };
 
   const render = () => {
     return (
       <>
-        <div className={"page__roster layout--two-column-detail"}>
-          <div className={"header"}>
-            <h2>Get Roster</h2>
-            {renderCalendarSelectForm()}
-          </div>
+        <div className={"page__roster component layout--two-column-detail"}>
+          <h2>Calendar</h2>
+          <div className={"header"}>{renderCalendarSelectForm()}</div>
           <div className={"body"}>
-            <div className={"layout__main-content"}>
+            <div className={"layout__main-content flex--v flex-gap--md"}>
               <Calendar isManagerView={isManagerView} override={override} />
               <RequestForm override={override} />
             </div>

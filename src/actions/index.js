@@ -138,7 +138,7 @@ export const fetchUserById = async (accessToken, id, id_type, { setData }) => {
   }
 };
 
-export const loginUser = async (accessToken, data) => {
+export const signInUser = async (accessToken, data) => {
   try {
     return await (
       await fetch(`${API_URL}/user/login`, {

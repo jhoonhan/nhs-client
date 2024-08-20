@@ -48,7 +48,7 @@ const UserSelectionForm = ({ authority }) => {
   const render = () => {
     if (authority < 2) return <h2>No access.</h2>;
     return (
-      <>
+      <div className={"component"}>
         <h2>Select User</h2>
         <form>
           <select
@@ -59,7 +59,7 @@ const UserSelectionForm = ({ authority }) => {
             {renderDummySelectors()}
           </select>
         </form>
-      </>
+      </div>
     );
   };
 

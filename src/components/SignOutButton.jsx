@@ -26,7 +26,7 @@ export const SignOutButton = () => {
   };
 
   return (
-    <div className={"flex--h flex-gap--d"}>
+    <div className={"flex--h flex-gap--md flex-align-cc"}>
       <p>
         Welcome,{" "}
         {formatName(currentUser.state.firstname, currentUser.state.lastname, 2)}

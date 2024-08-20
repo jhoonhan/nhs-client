@@ -15,6 +15,10 @@ div.calendar {
       //grid-template-columns: 50% 50%;
       grid-template-rows: 1fr 1fr;
 
+      border: 1px solid black;
+      border-radius: 2rem;
+      overflow: hidden;
+
 
       & div.calendar__day__box {
         width: 100%;
@@ -25,15 +29,14 @@ div.calendar {
         gap: 1rem;
 
         padding: 1.5rem 1rem;
-        border: 1px solid black;
 
         cursor: pointer;
 
         box-sizing: border-box;
+        background-color: white;
 
         &:nth-child(2n) {
-          border-top: 1px solid transparent;
-          margin-right: 1rem;
+          border-top: 1px solid black;
         }
 
         &.disabled {

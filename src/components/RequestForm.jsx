@@ -96,15 +96,20 @@ const RequestForm = ({ override }) => {
     );
   };
   return (
-    <div className={"component__request-form"}>
+    <div className={"component__request-form component"}>
       <h2>Make a Request</h2>
 
       {renderUnusedPriorities()}
-      <form onSubmit={handleRequestFormSubmit}>
+      <form
+        onSubmit={handleRequestFormSubmit}
+        className={"flex--v flex-gap--d"}
+      >
         <div className={"reqeust-form__selected-shifts"}>
           {renderSelectedShifts()}
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" className={"btn--primary"}>
+          Submit
+        </button>
       </form>
     </div>
   );
