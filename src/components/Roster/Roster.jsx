@@ -7,15 +7,8 @@ import Calendar from "./Calendar";
 import RosterDetail from "./RosterDetail";
 
 const Roster = ({ isManagerView, override }) => {
-  const {
-    computedRoster,
-    isLoggedIn,
-    currentUser,
-    selectedUser,
-    selectedShifts,
-    formData,
-    unusedPriorities,
-  } = React.useContext(AppContext);
+  const { computedRoster, isLoggedIn, currentUser, formData } =
+    React.useContext(AppContext);
 
   useEffect(() => {
     if (!isLoggedIn.state.accessToken || !currentUser.state) return;

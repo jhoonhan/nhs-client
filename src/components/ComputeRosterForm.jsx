@@ -3,6 +3,7 @@ import { computeRoster, getComputedRoster } from "../actions";
 import { AppContext } from "App";
 import Roster from "./Roster/Roster";
 import UserSelectionForm from "./UserSelectionForm";
+import OverrideForm from "components/OverrideForm";
 
 const ComputeRosterForm = ({ authority }) => {
   const { currentUser, formData, isLoggedIn } = React.useContext(AppContext);
@@ -31,23 +32,6 @@ const ComputeRosterForm = ({ authority }) => {
     e.target.id === "month"
       ? formData.setData({ ...formData.state, month: value })
       : formData.setData({ ...formData.state, year: value });
-  };
-
-  const renderOverrideForm = () => {
-    return (
-      <div className={"component"}>
-        <h2>Override</h2>
-        <form>
-          <select
-            value={override}
-            onChange={(e) => setOverride(e.target.value)}
-          >
-            <option value={1}>On</option>
-            <option value={0}>Off</option>
-          </select>
-        </form>
-      </div>
-    );
   };
 
   const render = () => {
@@ -80,7 +64,7 @@ const ComputeRosterForm = ({ authority }) => {
 
         <div className={"flex--h flex-gap--md"}>
           <UserSelectionForm authority={currentUser.state.authority} />
-          {renderOverrideForm()}
+          <OverrideForm override={override} setOverride={setOverride} />
         </div>
         <Roster isManagerView={true} override={override} />
       </div>
