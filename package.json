@@ -45,6 +45,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@microsoft/microsoft-graph-types": "^2.40.0"
+    "@microsoft/microsoft-graph-types": "^2.40.0",
+    "@types/jest": "^29.5.12"
   }
 }

@@ -1,7 +1,7 @@
 import { API_URL } from "../config";
 import server from "../server";
 
-const generateHeader = (method, accessToken) => {
+export const generateHeader = (method, accessToken) => {
   return {
     method: method,
     headers: {
@@ -10,7 +10,7 @@ const generateHeader = (method, accessToken) => {
     },
   };
 };
-const formatRequests = ({ requests, shifts }) => {
+export const formatRequests = ({ requests, shifts }) => {
   // 7/30 Fix
   const groupedByShift = {};
   const groupedByUser = {};

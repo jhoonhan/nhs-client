@@ -26,18 +26,8 @@ const App = () => {
   const location = useLocation();
 
   const contextValues = useContextValues();
-  const {
-    isLoggedIn,
-    computedRoster,
-    form,
-    users,
-    formData,
-    currentUser,
-    selectedUser,
-    selectedShifts,
-    unusedPriorities,
-    requests,
-  } = contextValues;
+  const { isLoggedIn, currentUser, selectedUser, selectedShifts } =
+    contextValues;
 
   useEffect(() => {
     selectedShifts.setData([]);
