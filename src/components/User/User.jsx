@@ -6,7 +6,7 @@ import { formatName } from "helpers/formatters";
 import UserInvitationForm from "./UserInvitationForm";
 import UserUpdateForm from "./UserUpdateForm";
 
-const UserList = ({ authority }) => {
+const User = ({ authority }) => {
   const { isLoggedIn, users } = React.useContext(AppContext);
   const [selectedPageUser, setSelectedPageUser] = useState({
     user_id: 0,
@@ -109,4 +109,4 @@ const UserList = ({ authority }) => {
   return render();
 };
 
-export default UserList;
+export default User;

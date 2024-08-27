@@ -7,13 +7,14 @@ import {
 } from "@azure/msal-react";
 
 import Roster from "components/Roster/Roster";
-import ComputeRosterForm from "components/ComputeRosterForm";
+import Manager from "components/Manager";
 
 import useContextValues from "./useContextValues";
 import { Route, Switch, useLocation } from "react-router-dom";
 
 import { PageLayout } from "components/PageLayout";
-import UserList from "components/UserList/UserList";
+import User from "components/User/User";
+import Bids from "components/Bids";
 
 export const AppContext = React.createContext();
 
@@ -47,7 +48,11 @@ const App = () => {
     selectedUser.setData(currentUser.state.user_id);
   }, [currentUser.state.user_id]);
 
-  const renderUnauthirized = () => (
+  useEffect(() => {
+    console.log(isLoggedIn.state.accessToken);
+  }, [isLoggedIn.state.accessToken]);
+
+  const renderUnauthorized = () => (
     <div className={"please-sign-in"}>
       <h3>Sign in using the UHB email address.</h3>
       <p>
@@ -67,15 +72,19 @@ const App = () => {
                   <Route
                     path="/manager"
                     render={() => (
-                      <ComputeRosterForm
-                        authority={currentUser.state.authority}
-                      />
+                      <Manager authority={currentUser.state.authority} />
+                    )}
+                  />
+                  <Route
+                    path="/bids"
+                    render={() => (
+                      <Bids authority={currentUser.state.authority} />
                     )}
                   />
                   <Route
                     path="/users"
                     render={() => (
-                      <UserList authority={currentUser.state.authority} />
+                      <User authority={currentUser.state.authority} />
                     )}
                   />
                   <Route
@@ -86,11 +95,11 @@ const App = () => {
               </AuthenticatedTemplate>
 
               <UnauthenticatedTemplate>
-                {renderUnauthirized()}
+                {renderUnauthorized()}
               </UnauthenticatedTemplate>
             </>
           ) : (
-            <>{renderUnauthirized()}</>
+            <>{renderUnauthorized()}</>
           )}
         </PageLayout>
       </div>

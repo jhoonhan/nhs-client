@@ -32,6 +32,7 @@ export const validateShiftSelection = (
   const groupedRequestByShift = computedRoster.state.requests.groupedByShift;
   const groupedRequestByUser = computedRoster.state.requests.groupedByUser;
 
+  // Check status of request
   if (shift.shift_id in groupedRequestByShift) {
     if (selectedUser.state in groupedRequestByShift[shift.shift_id].approved) {
       shift.selectable = 2;
@@ -44,7 +45,7 @@ export const validateShiftSelection = (
     }
   }
 
-  // Check if either user has booked in day or night shift
+  // Check if either user has another request in the same day
   for (let i = 0; i < arr.length; i++) {
     let shiftEl = arr[i];
     if (
@@ -58,7 +59,7 @@ export const validateShiftSelection = (
     }
   }
 
-  // Check if previous day NIGHT when DAY selected.
+  // Check if previous day NIGHT when a DAY selected.
   if (shift.is_day && groupedByDay[shift.day_num - 1]) {
     const prevDay = groupedByDay[shift.day_num - 1];
     if (
@@ -74,7 +75,7 @@ export const validateShiftSelection = (
     }
   }
 
-  // Check if next day DAY when NIGHT selected.
+  // Check if next day DAY when a NIGHT selected.
   if (!shift.is_day && groupedByDay[shift.day_num + 1]) {
     const nextDay = groupedByDay[shift.day_num + 1];
     if (
@@ -90,7 +91,7 @@ export const validateShiftSelection = (
     }
   }
 
-  // Check if user has more than 3 shifts in a week
+  // Check if user has more than 3 requests in a week
   let userRequests = {};
   if (selectedUser.state in groupedRequestByUser) {
     userRequests = groupShifts(
@@ -100,7 +101,7 @@ export const validateShiftSelection = (
       "week",
     );
   }
-  let userRequestForTheWeek =
+  const userRequestForTheWeek =
     week_id in userRequests
       ? userRequests[week_id].length +
         getCurrentWeekSelectedCount({ selectedShifts, computedRoster }, week_id)
@@ -114,7 +115,7 @@ export const validateShiftSelection = (
   }
   // }
 
-  // Check if open or closed
+  // Check if shift is open or closed
   if (shift.status !== "open") {
     shift.selectable = 0;
   }

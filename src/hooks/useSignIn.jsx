@@ -39,11 +39,9 @@ const useSignIn = () => {
           setAccessToken(accessToken);
           setIsLoggedIn(true);
           // Get user_id from the db using ms_id
-          // 8/6 update. Set currentUser to have all information.
           const userData = await fetchUserById(response.accessToken, ms_id, 1);
           // 8/6 - Sets currentUser to have all information
           setCurrentUser({ ...account, ...userData.data });
-          // currentUser.setData({ ...account, ...userData.data });
         })
         .catch((error) => {
           console.error(error);
